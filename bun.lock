@@ -33,6 +33,13 @@
         "react-dom": ">=18.0.0",
       },
     },
+    "packages/cli": {
+      "name": "@incld/cli",
+      "version": "0.1.0",
+      "bin": {
+        "incld": "./bin/incld.mjs",
+      },
+    },
     "packages/client": {
       "name": "@incld/client",
       "version": "0.1.0",
@@ -376,6 +383,8 @@
     "@img/sharp-win32-ia32": ["@img/sharp-win32-ia32@0.35.3", "", { "os": "win32", "cpu": "ia32" }, "sha512-r53mXsBN6lFUDiST764SvgwUdHAqM4rPAiDzAmf4fLoB6X/rkfyTrLCg6+g17wJJiCmB3JYgHuUldCWUIRFSXw=="],
 
     "@img/sharp-win32-x64": ["@img/sharp-win32-x64@0.35.3", "", { "os": "win32", "cpu": "x64" }, "sha512-D4y1vNeZrIIJCN+uHaWVtH86B+aCrdMYYjicy9pXHvbGZeGYLLSd3wdVuC37FxVXlU1ARsk84eKWfWMXGYEqvA=="],
+
+    "@incld/cli": ["@incld/cli@workspace:packages/cli"],
 
     "@incld/client": ["@incld/client@workspace:packages/client"],
 

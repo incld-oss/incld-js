@@ -21,9 +21,9 @@
     "changeset": "changeset",
     "docs:generate": "bun run scripts/generate-react-api.ts",
     "docs:check": "bun run scripts/generate-react-api.ts --check",
-    "build": "bun run --cwd packages/client build && bun run --cwd packages/react build && bun run --cwd packages/react-schedules build && bun run --cwd packages/react-approvals build && bun run --cwd packages/audit build && bun run --cwd packages/react-bulk build && bun run --cwd packages/nextjs-schedules build && bun run --cwd packages/nextjs-approvals build",
-    "typecheck": "bun run --cwd packages/client typecheck && bun run --cwd packages/react typecheck && bun run --cwd packages/react-schedules typecheck && bun run --cwd packages/react-approvals typecheck && bun run --cwd packages/audit typecheck && bun run --cwd packages/react-bulk typecheck && bun run --cwd packages/nextjs-schedules typecheck && bun run --cwd packages/nextjs-approvals typecheck",
-    "test": "bun run docs:check && bun test --cwd packages/client && bun test packages/react/test packages/react-schedules/test packages/react-approvals/test packages/audit/test packages/react-bulk/test packages/nextjs-schedules/test packages/nextjs-approvals/test",
+    "build": "bun run --cwd packages/cli build && bun run --cwd packages/client build && bun run --cwd packages/react build && bun run --cwd packages/react-schedules build && bun run --cwd packages/react-approvals build && bun run --cwd packages/audit build && bun run --cwd packages/react-bulk build && bun run --cwd packages/nextjs-schedules build && bun run --cwd packages/nextjs-approvals build",
+    "typecheck": "bun run --cwd packages/cli typecheck && bun run --cwd packages/client typecheck && bun run --cwd packages/react typecheck && bun run --cwd packages/react-schedules typecheck && bun run --cwd packages/react-approvals typecheck && bun run --cwd packages/audit typecheck && bun run --cwd packages/react-bulk typecheck && bun run --cwd packages/nextjs-schedules typecheck && bun run --cwd packages/nextjs-approvals typecheck",
+    "test": "bun run docs:check && bun run --cwd packages/cli test && bun test --cwd packages/client && bun test packages/react/test packages/react-schedules/test packages/react-approvals/test packages/audit/test packages/react-bulk/test packages/nextjs-schedules/test packages/nextjs-approvals/test",
     "verify:consumer": "bun run scripts/verify-consumer.ts",
     "verify:packages": "bun run scripts/verify-packages.ts",
     "version-packages": "changeset version"

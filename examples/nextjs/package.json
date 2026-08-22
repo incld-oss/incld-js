@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "typecheck": "tsc --noEmit",
-    "verify": "npm run lint && npm run typecheck && npm run verify:quickstart && npm run verify:main",
+    "verify": "npm run lint && npm run typecheck && npm run verify:quickstart && npm run verify:cli && npm run verify:main",
     "verify:quickstart": "tsc --noEmit -p quickstart/tsconfig.json && INCLD_SECRET_KEY=sk_quickstart INCLD_WEBHOOK_SECRET=whsec_quickstart NEXT_TELEMETRY_DISABLED=1 next build quickstart",
+    "verify:cli": "node scripts/verify-cli.mjs",
     "verify:main": "INCLD_SECRET_KEY=sk_verify INCLD_WEBHOOK_SECRET=whsec_verify INCLD_DEMO_USER_ID=verify_user NEXT_TELEMETRY_DISABLED=1 next build",
     "start": "next start",
     "lint": "eslint"

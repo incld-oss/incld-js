@@ -1,0 +1,35 @@
+{
+  "name": "@incld/cli",
+  "version": "0.1.0",
+  "description": "Securely scaffold INCLD into an existing Next.js App Router project",
+  "type": "module",
+  "bin": {
+    "incld": "./bin/incld.mjs"
+  },
+  "scripts": {
+    "build": "node --check src/cli.mjs && node --check bin/incld.mjs",
+    "typecheck": "node --check src/cli.mjs && node --check bin/incld.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/incld-oss/incld-js.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://incld.dev/docs",
+  "bugs": {
+    "url": "https://github.com/incld-oss/incld-js/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

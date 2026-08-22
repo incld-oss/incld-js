@@ -13,6 +13,7 @@ for (const directory of readdirSync(packagesDirectory, {withFileTypes: true})) {
     name?: string;
     private?: boolean;
     files?: string[];
+    bin?: string | Record<string, string>;
     license?: string;
     repository?: {url?: string; directory?: string};
     publishConfig?: {access?: string};
@@ -26,7 +27,13 @@ for (const directory of readdirSync(packagesDirectory, {withFileTypes: true})) {
   if (!existsSync(resolve(packagesDirectory, directory.name, 'LICENSE'))) {
     problems.push(`${label}: LICENSE is missing from the package directory`);
   }
-  if (!manifest.files?.includes('dist')) problems.push(`${label}: dist is not allowlisted for publication`);
+  const packagesDistribution = manifest.files?.includes('dist');
+  const packagesExecutableSource = Boolean(manifest.bin)
+    && manifest.files?.includes('bin')
+    && manifest.files?.includes('src');
+  if (!packagesDistribution && !packagesExecutableSource) {
+    problems.push(`${label}: no distributable library or executable files are allowlisted`);
+  }
   if (manifest.publishConfig?.access !== 'public') problems.push(`${label}: public npm access is not explicit`);
   if (manifest.repository?.url !== 'git+https://github.com/incld-oss/incld-js.git') {
     problems.push(`${label}: repository URL does not match the trusted publisher repository`);

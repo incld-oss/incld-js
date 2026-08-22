@@ -7,6 +7,7 @@ schedules, approvals, audit trails, and bulk operations for application teams.
 
 | Package | Purpose |
 | --- | --- |
+| `@incld/cli` | Safe Next.js App Router initializer (`npx @incld/cli init`) |
 | `@incld/client` | Trusted server client, credential-free browser client, signed webhooks, and Next.js, Express, SvelteKit, and Nuxt adapters |
 | `@incld/react` | Shared provider, appearance contract, and async primitives |
 | `@incld/react-schedules` | Scheduling components and hooks |
@@ -19,6 +20,19 @@ until their publication policy is finalized. The Svelte packages are
 experimental and unpublished.
 
 ## Install
+
+For an existing Next.js App Router project:
+
+```bash
+npx @incld/cli init
+```
+
+Preview the generated routes, provider, environment template, and dependencies
+without changing the project with `npx @incld/cli init --dry-run`. The
+initializer refuses to overwrite files and generates a deny-by-default server
+authorization hook.
+
+For manual installation:
 
 ```bash
 npm install @incld/client @incld/react

@@ -1,4 +1,4 @@
-import {mkdtempSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
+import {mkdtempSync, mkdirSync, readdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {basename, join, resolve} from 'node:path';
 import {spawnSync} from 'node:child_process';
@@ -11,6 +11,7 @@ mkdirSync(tarballs);
 mkdirSync(consumer);
 
 const packageDirectories = [
+  'cli',
   'client',
   'react',
   'react-schedules',
@@ -37,9 +38,11 @@ for (const directory of packageDirectories) {
   const manifest = JSON.parse(readFileSync(resolve(packageDirectory, 'package.json'), 'utf8')) as {
     name: string;
   };
-  const output = JSON.parse(run('npm', ['pack', packageDirectory, '--pack-destination', tarballs, '--json']));
-  const filename = output[0]?.filename as string | undefined;
-  if (!filename) throw new Error(`npm pack did not return a tarball for ${manifest.name}`);
+  const before = new Set(readdirSync(tarballs));
+  run('npm', ['pack', packageDirectory, '--pack-destination', tarballs, '--json']);
+  const created = readdirSync(tarballs).filter(filename => !before.has(filename));
+  if (created.length !== 1) throw new Error(`npm pack emitted ${created.length} tarballs for ${manifest.name}`);
+  const [filename] = created;
   dependencies[manifest.name] = `file:${join(tarballs, basename(filename))}`;
 }
 
@@ -66,3 +69,6 @@ run('npm', ['install', '--ignore-scripts'], consumer);
 run('npm', ['audit', '--omit=dev'], consumer);
 const verification = run('node', ['verify.mjs'], consumer);
 console.log(verification);
+const cli = run('node', [resolve(consumer, 'node_modules', '@incld', 'cli', 'bin', 'incld.mjs'), '--help'], consumer);
+if (!cli.includes('npx @incld/cli init')) throw new Error('Packaged CLI help is unavailable');
+console.log('Clean consumer executed the packaged CLI.');
