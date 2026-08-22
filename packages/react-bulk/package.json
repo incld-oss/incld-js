@@ -12,8 +12,8 @@
   "devDependencies": {"react": "^18.0.0", "react-dom": "^18.0.0", "@types/react": "^18.0.0", "@types/react-dom": "^18.0.0", "tsup": "^8.0.0", "typescript": "^5.5.0"},
   "files": ["dist"],
   "license": "MIT",
-  "repository": {"type": "git", "url": "git+https://github.com/incld-dev/incld-js.git", "directory": "packages/react-bulk"},
+  "repository": {"type": "git", "url": "git+https://github.com/incld-oss/incld-js.git", "directory": "packages/react-bulk"},
   "homepage": "https://incld.dev/docs",
-  "bugs": {"url": "https://github.com/incld-dev/incld-js/issues"},
+  "bugs": {"url": "https://github.com/incld-oss/incld-js/issues"},
   "publishConfig": {"access": "public", "provenance": true}
 }

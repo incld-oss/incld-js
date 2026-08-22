@@ -61,7 +61,7 @@ React is the GA component runtime. The current Svelte components are not release
   - compatibility entry points for existing Next.js consumers;
   - re-export the current `@incld/react-*` component API, `IncldProvider`, and `@incld/client/next` server helpers;
   - add no runtime behavior of their own.
-- `github.com/incld-dev/incld-go`
+- `github.com/incld-oss/incld-go`
 - `hex.pm/packages/incld`
 
 ### Retired before first release
