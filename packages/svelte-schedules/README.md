@@ -44,7 +44,7 @@ The default theme is intentionally restrained. Useful tokens include `accent`, `
 </ScheduleButton>
 ```
 
-Without a `trigger` slot, `ScheduleButton` renders the neutral INCLD button. A `builder` slot is also available when you want to replace the entire modal body.
+Without a `trigger` slot, `ScheduleButton` renders the neutral incld button. A `builder` slot is also available when you want to replace the entire modal body.
 
 ## Fine-grained control slots
 

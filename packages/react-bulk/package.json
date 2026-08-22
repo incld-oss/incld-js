@@ -1,7 +1,7 @@
 {
   "name": "@incld/react-bulk",
   "version": "0.1.0",
-  "description": "React components for monitoring INCLD bulk operations",
+  "description": "React components for monitoring incld bulk operations",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

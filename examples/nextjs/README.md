@@ -1,4 +1,4 @@
-# INCLD Next.js reference
+# incld Next.js reference
 
 This app is the copyable reference for the supported React components and Next.js App Router integration. It demonstrates one browser provider, a same-origin allowlisted proxy, server-owned identity, a separate signed webhook, and server-initiated bulk work.
 

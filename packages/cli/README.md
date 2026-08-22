@@ -1,6 +1,6 @@
 # `@incld/cli`
 
-Scaffold the secure INCLD server routes and browser provider into an existing
+Scaffold the secure incld server routes and browser provider into an existing
 Next.js App Router project.
 
 ```bash

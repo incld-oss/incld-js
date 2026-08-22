@@ -1,6 +1,6 @@
 # @incld/react
 
-Shared React provider, async behavior, accessible primitives, theming, labels, and error helpers for every INCLD feature package.
+Shared React provider, async behavior, accessible primitives, theming, labels, and error helpers for every incld feature package.
 
 ## Install and configure
 

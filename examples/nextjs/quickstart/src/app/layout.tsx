@@ -4,7 +4,7 @@ import "@incld/react/styles.css"
 import "@incld/react-schedules/styles.css"
 
 export const metadata: Metadata = {
- title: "INCLD quickstart contract",
+ title: "incld quickstart contract",
  description: "Compiling fixture for the published Next.js quickstart",
 }
 

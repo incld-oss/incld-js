@@ -37,7 +37,7 @@ export function ComponentShowcase() {
     <IncldProvider
       baseUrl="/api/incld/v1"
       appearance={{colorScheme: 'light', accentColor: 'emerald', radius: 'large'}}
-      onError={error => console.error('INCLD component error', error)}
+      onError={error => console.error('incld component error', error)}
     >
       <ShowcaseSections />
     </IncldProvider>

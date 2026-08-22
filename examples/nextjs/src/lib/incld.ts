@@ -3,7 +3,7 @@ import {createIncld, defineActions} from '@incld/client/next';
 
 function required(name: 'INCLD_SECRET_KEY' | 'INCLD_WEBHOOK_SECRET') {
   const value = process.env[name];
-  if (!value) throw new Error(`${name} is required to run the INCLD integration.`);
+  if (!value) throw new Error(`${name} is required to run the incld integration.`);
   return value;
 }
 

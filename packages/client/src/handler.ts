@@ -263,7 +263,7 @@ export function createCoreIntegration<Context extends IncldContext = IncldContex
   const routes = async (request: Request, native?: Native): Promise<Response> => {
     const incoming = new URL(request.url, 'http://incld.local');
     const path = apiPath(incoming.pathname);
-    if (!path) return errorResponse(404, 'route_not_found', 'No INCLD API route matched this request.');
+    if (!path) return errorResponse(404, 'route_not_found', 'No incld API route matched this request.');
 
     const operation = resolveProxyOperation(request.method, path);
     if (!operation) return errorResponse(405, 'operation_not_allowed', 'This operation is not available through the browser proxy.');

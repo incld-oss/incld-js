@@ -12,7 +12,7 @@ const FEATURE_PACKAGES = {
 
 const HELP = `Usage: incld init [directory] [options]
 
-Scaffold INCLD into an existing Next.js App Router project.
+Scaffold incld into an existing Next.js App Router project.
 
 Options:
   --features <list>          Comma-separated features (default: schedules)

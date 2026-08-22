@@ -1,6 +1,6 @@
 # @incld/client
 
-The JavaScript/TypeScript SDK for the INCLD v1 API. It contains two deliberately different clients:
+The JavaScript/TypeScript SDK for the incld v1 API. It contains two deliberately different clients:
 
 - `Incld` is the trusted-server client. It requires a project secret key and can call the complete API.
 - `IncldBrowser` is credential-free and same-origin only. It calls a framework proxy in your application, which authenticates the current user and supplies trusted identity.
@@ -159,7 +159,7 @@ For manual verification, preserve the exact raw body. The low-level function ret
 import {verifyWebhookSignature} from '@incld/client';
 
 const valid = await verifyWebhookSignature(rawBody, signature, webhookSecret, 300);
-if (!valid) throw new Error('Invalid INCLD signature');
+if (!valid) throw new Error('Invalid incld signature');
 const event = JSON.parse(rawBody);
 ```
 
