@@ -1,7 +1,7 @@
 {
   "name": "@incld/cli",
   "version": "0.1.0",
-  "description": "Securely scaffold INCLD into an existing Next.js App Router project",
+  "description": "Securely scaffold incld into an existing Next.js App Router project",
   "type": "module",
   "bin": {
     "incld": "./bin/incld.mjs"

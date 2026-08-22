@@ -18,6 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Enforce lowercase brand
+        run: |
+          legacy_brand='IN''CLD'
+          if git grep -n -I -E "(^|[^[:alnum:]_])${legacy_brand}([^[:alnum:]_]|$)"; then
+            echo "Use incld, @incld, or incld.dev in public-facing text."
+            exit 1
+          fi
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
@@ -37,6 +44,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Enforce lowercase brand
+        run: |
+          legacy_brand='IN''CLD'
+          if git grep -n -I -E "(^|[^[:alnum:]_])${legacy_brand}([^[:alnum:]_]|$)"; then
+            echo "Use incld, @incld, or incld.dev in public-facing text."
+            exit 1
+          fi
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24

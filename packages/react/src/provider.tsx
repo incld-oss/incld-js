@@ -161,7 +161,7 @@ export function IncldProvider({
 
 export function useIncld() {
   const value = useContext(Context);
-  if (!value) throw new Error('INCLD components must be rendered inside <IncldProvider>.');
+  if (!value) throw new Error('incld components must be rendered inside <IncldProvider>.');
   return value;
 }
 

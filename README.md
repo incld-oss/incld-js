@@ -1,6 +1,6 @@
-# INCLD JavaScript SDK
+# incld JavaScript SDK
 
-The public JavaScript and React SDKs for [INCLD](https://incld.dev): durable
+The public JavaScript and React SDKs for [incld](https://incld.dev): durable
 schedules, approvals, audit trails, and bulk operations for application teams.
 
 ## Packages

@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return <html lang="en"><body>{children}</body></html>
 }
 `)
-  writeFileSync(join(fixture, "src", "app", "page.tsx"), "export default function Page() { return <main>INCLD</main> }\n")
+  writeFileSync(join(fixture, "src", "app", "page.tsx"), "export default function Page() { return <main>incld</main> }\n")
 
   const executableSuffix = process.platform === "win32" ? ".cmd" : ""
   run(join(exampleDirectory, "node_modules", ".bin", `tsc${executableSuffix}`), ["--noEmit", "-p", join(fixture, "tsconfig.json")])
