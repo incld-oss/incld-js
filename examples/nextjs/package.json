@@ -1,0 +1,36 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run lint && npm run typecheck && npm run verify:quickstart && npm run verify:main",
+    "verify:quickstart": "tsc --noEmit -p quickstart/tsconfig.json && INCLD_SECRET_KEY=sk_quickstart INCLD_WEBHOOK_SECRET=whsec_quickstart NEXT_TELEMETRY_DISABLED=1 next build quickstart",
+    "verify:main": "INCLD_SECRET_KEY=sk_verify INCLD_WEBHOOK_SECRET=whsec_verify INCLD_DEMO_USER_ID=verify_user NEXT_TELEMETRY_DISABLED=1 next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@incld/client": "file:../../packages/client",
+    "@incld/react": "file:../../packages/react",
+    "@incld/react-schedules": "file:../../packages/react-schedules",
+    "@incld/react-approvals": "file:../../packages/react-approvals",
+    "@incld/react-audit": "file:../../packages/audit",
+    "@incld/react-bulk": "file:../../packages/react-bulk",
+    "next": "16.3.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,2 @@
+[test]
+ignore = ["packages/react-schedules/test", "packages/svelte-schedules/test"]

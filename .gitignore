@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.next/
+.svelte-kit/
+**/playwright/.cache/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example

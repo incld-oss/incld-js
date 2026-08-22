@@ -1,0 +1,1083 @@
+{
+  "schemaVersion": 1,
+  "packages": [
+    {
+      "package": "@incld/react",
+      "interfaces": [
+        {
+          "name": "AsyncViewProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "loading",
+              "type": "ReactNode",
+              "optional": true
+            },
+            {
+              "name": "empty",
+              "type": "ReactNode",
+              "optional": true
+            },
+            {
+              "name": "error",
+              "type": "(error: IncldError, retry: () => void) => ReactNode",
+              "optional": true
+            }
+          ],
+          "source": "packages/react/src/primitives.tsx:5"
+        },
+        {
+          "name": "IncldAppearance",
+          "extends": [],
+          "props": [
+            {
+              "name": "colorScheme",
+              "type": "'light' | 'dark' | 'system'",
+              "optional": true
+            },
+            {
+              "name": "accentColor",
+              "type": "'indigo' | 'blue' | 'emerald' | 'amber' | 'rose'",
+              "optional": true
+            },
+            {
+              "name": "radius",
+              "type": "'small' | 'medium' | 'large'",
+              "optional": true
+            },
+            {
+              "name": "density",
+              "type": "'compact' | 'comfortable'",
+              "optional": true
+            },
+            {
+              "name": "variables",
+              "type": "IncldThemeVariables",
+              "optional": true
+            }
+          ],
+          "source": "packages/react/src/provider.tsx:42"
+        },
+        {
+          "name": "IncldButtonProps",
+          "extends": [
+            "ButtonHTMLAttributes<HTMLButtonElement>"
+          ],
+          "props": [
+            {
+              "name": "busy",
+              "type": "boolean",
+              "optional": true
+            }
+          ],
+          "source": "packages/react/src/primitives.tsx:56"
+        },
+        {
+          "name": "IncldDialogProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "open",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "onOpenChange",
+              "type": "(open: boolean) => void",
+              "optional": false
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "backdropClassName",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "closeLabel",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "optional": false
+            }
+          ],
+          "source": "packages/react/src/primitives.tsx:65"
+        },
+        {
+          "name": "IncldEmptyStateProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "title",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react/src/primitives.tsx:17"
+        },
+        {
+          "name": "IncldErrorStateProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "error",
+              "type": "IncldError",
+              "optional": false
+            },
+            {
+              "name": "retry",
+              "type": "() => void",
+              "optional": false
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react/src/primitives.tsx:22"
+        },
+        {
+          "name": "IncldFieldErrorProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "error",
+              "type": "IncldError",
+              "optional": true
+            },
+            {
+              "name": "fields",
+              "type": "string | string[]",
+              "optional": false
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react/src/primitives.tsx:39"
+        },
+        {
+          "name": "IncldProviderProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "client",
+              "type": "IncldBrowser",
+              "optional": true
+            },
+            {
+              "name": "baseUrl",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "appearance",
+              "type": "IncldAppearance",
+              "optional": true
+            },
+            {
+              "name": "labels",
+              "type": "Record<string, string>",
+              "optional": true
+            },
+            {
+              "name": "onError",
+              "type": "(error: IncldError) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "style",
+              "type": "CSSProperties",
+              "optional": true
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "optional": false
+            }
+          ],
+          "source": "packages/react/src/provider.tsx:65"
+        },
+        {
+          "name": "IncldSpinnerProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "label",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react/src/primitives.tsx:11"
+        },
+        {
+          "name": "IncldThemeVariables",
+          "extends": [],
+          "props": [
+            {
+              "name": "accent",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "accentHover",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "accentContrast",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "accentInk",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "accentSoft",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "background",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "surface",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "surfaceHover",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "border",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "muted",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "danger",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "dangerSoft",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "dangerBorder",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "success",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "successSoft",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "successBorder",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "warning",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "warningSoft",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "warningBorder",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "radius",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "spacing",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "shadow",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "fontFamily",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "fontSize",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "lineHeight",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "focusRing",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react/src/provider.tsx:12"
+        }
+      ]
+    },
+    {
+      "package": "@incld/react-schedules",
+      "interfaces": [
+        {
+          "name": "NextRunProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "schedule",
+              "type": "Schedule",
+              "optional": true
+            },
+            {
+              "name": "scheduleId",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "format",
+              "type": "'relative' | 'absolute' | 'both'",
+              "optional": true
+            },
+            {
+              "name": "locale",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "timeZone",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-schedules/src/components.tsx:72"
+        },
+        {
+          "name": "RunHistoryProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "scheduleId",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "filters",
+              "type": "ListRunsParams",
+              "optional": true
+            },
+            {
+              "name": "locale",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "timeZone",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-schedules/src/components.tsx:63"
+        },
+        {
+          "name": "ScheduleComposerProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "action",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "payload",
+              "type": "Record<string, unknown>",
+              "optional": true
+            },
+            {
+              "name": "scheduleId",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "initialSchedule",
+              "type": "Schedule",
+              "optional": true
+            },
+            {
+              "name": "defaultValue",
+              "type": "Partial<ScheduleInput>",
+              "optional": true
+            },
+            {
+              "name": "mode",
+              "type": "'create' | 'edit'",
+              "optional": true
+            },
+            {
+              "name": "onSaved",
+              "type": "(schedule: Schedule) => void",
+              "optional": true
+            },
+            {
+              "name": "onCancel",
+              "type": "() => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "classNames",
+              "type": "ScheduleComposerSlots",
+              "optional": true
+            },
+            {
+              "name": "unstyled",
+              "type": "boolean",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-schedules/src/ScheduleComposer.tsx:13"
+        },
+        {
+          "name": "ScheduleComposerSlots",
+          "extends": [],
+          "props": [
+            {
+              "name": "root",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "field",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "actions",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "preview",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-schedules/src/ScheduleComposer.tsx:12"
+        },
+        {
+          "name": "ScheduleDetailsProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "scheduleId",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "onUpdated",
+              "type": "(schedule: Schedule) => void",
+              "optional": true
+            },
+            {
+              "name": "onDeleted",
+              "type": "(schedule: Schedule) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-schedules/src/components.tsx:32"
+        },
+        {
+          "name": "ScheduleListProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "filters",
+              "type": "ListSchedulesParams",
+              "optional": true
+            },
+            {
+              "name": "pageSize",
+              "type": "number",
+              "optional": true
+            },
+            {
+              "name": "renderItem",
+              "type": "(schedule: Schedule) => ReactNode",
+              "optional": true
+            },
+            {
+              "name": "onSelect",
+              "type": "(schedule: Schedule) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-schedules/src/components.tsx:19"
+        },
+        {
+          "name": "ScheduleTriggerProps",
+          "extends": [
+            "Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onError'>"
+          ],
+          "props": [
+            {
+              "name": "action",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "defaultPayload",
+              "type": "Record<string, unknown>",
+              "optional": true
+            },
+            {
+              "name": "defaultSchedule",
+              "type": "ScheduleComposerProps['defaultValue']",
+              "optional": true
+            },
+            {
+              "name": "onCreated",
+              "type": "(schedule: Schedule) => void",
+              "optional": true
+            },
+            {
+              "name": "dialogTitle",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "dialogClassName",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-schedules/src/components.tsx:8"
+        }
+      ]
+    },
+    {
+      "package": "@incld/react-approvals",
+      "interfaces": [
+        {
+          "name": "ApprovalActionsProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "approvalId",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "visible",
+              "type": "Array<'approve' | 'reject' | 'cancel' | 'revoke'>",
+              "optional": true
+            },
+            {
+              "name": "onResolved",
+              "type": "(approval: Approval) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:32"
+        },
+        {
+          "name": "ApprovalDetailsProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "approvalId",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "showActions",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "showTimeline",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "onResolved",
+              "type": "(approval: Approval) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:46"
+        },
+        {
+          "name": "ApprovalGateProps",
+          "extends": [
+            "ApprovalCheckInput"
+          ],
+          "props": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "optional": false
+            },
+            {
+              "name": "fallback",
+              "type": "ReactNode",
+              "optional": true
+            },
+            {
+              "name": "pending",
+              "type": "ReactNode",
+              "optional": true
+            },
+            {
+              "name": "refreshOnFocus",
+              "type": "boolean",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:58"
+        },
+        {
+          "name": "ApprovalInboxProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "view",
+              "type": "'assigned' | 'requested' | 'all'",
+              "optional": true
+            },
+            {
+              "name": "filters",
+              "type": "ListApprovalsParams",
+              "optional": true
+            },
+            {
+              "name": "pageSize",
+              "type": "number",
+              "optional": true
+            },
+            {
+              "name": "renderItem",
+              "type": "(approval: Approval) => ReactNode",
+              "optional": true
+            },
+            {
+              "name": "onSelect",
+              "type": "(approval: Approval) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:23"
+        },
+        {
+          "name": "ApprovalPolicyEditorProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "policy",
+              "type": "ApprovalPolicy",
+              "optional": true
+            },
+            {
+              "name": "onSaved",
+              "type": "(policy: ApprovalPolicy) => void",
+              "optional": true
+            },
+            {
+              "name": "onDeleted",
+              "type": "(policy: ApprovalPolicy) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:74"
+        },
+        {
+          "name": "ApprovalPolicyListProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "onSelect",
+              "type": "(id: string) => void",
+              "optional": true
+            },
+            {
+              "name": "selectedId",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:63"
+        },
+        {
+          "name": "ApprovalRequestDialogProps",
+          "extends": [
+            "ApprovalRequestInput"
+          ],
+          "props": [
+            {
+              "name": "open",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "onOpenChange",
+              "type": "(open: boolean) => void",
+              "optional": false
+            },
+            {
+              "name": "onCreated",
+              "type": "(approval: Approval) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:8"
+        },
+        {
+          "name": "ApprovalRequestTriggerProps",
+          "extends": [
+            "ApprovalRequestInput",
+            "Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'action' | 'onError'>"
+          ],
+          "props": [
+            {
+              "name": "onCreated",
+              "type": "(approval: Approval) => void",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:17"
+        },
+        {
+          "name": "ApprovalTimelineProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "approval",
+              "type": "Approval",
+              "optional": false
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-approvals/src/components.tsx:40"
+        }
+      ]
+    },
+    {
+      "package": "@incld/react-bulk",
+      "interfaces": [
+        {
+          "name": "BulkOperationDetailsProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "operationId",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-bulk/src/components.tsx:25"
+        },
+        {
+          "name": "BulkOperationListProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "filters",
+              "type": "ListBulkOperationsParams",
+              "optional": true
+            },
+            {
+              "name": "onSelect",
+              "type": "(id: string) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-bulk/src/components.tsx:19"
+        },
+        {
+          "name": "BulkProgressProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "operationId",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "operation",
+              "type": "BulkOperation",
+              "optional": true
+            },
+            {
+              "name": "cancellable",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "onCancelled",
+              "type": "() => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/react-bulk/src/components.tsx:6"
+        }
+      ]
+    },
+    {
+      "package": "@incld/react-audit",
+      "interfaces": [
+        {
+          "name": "AuditEventDetailsProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "eventId",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "event",
+              "type": "AuditEvent",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/audit/src/components.tsx:21"
+        },
+        {
+          "name": "AuditFiltersProps",
+          "extends": [],
+          "props": [
+            {
+              "name": "value",
+              "type": "ListAuditEventsParams",
+              "optional": true
+            },
+            {
+              "name": "defaultValue",
+              "type": "ListAuditEventsParams",
+              "optional": true
+            },
+            {
+              "name": "onChange",
+              "type": "(filters: ListAuditEventsParams) => void",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/audit/src/components.tsx:30"
+        },
+        {
+          "name": "AuditTimelineProps",
+          "extends": [
+            "AsyncViewProps"
+          ],
+          "props": [
+            {
+              "name": "filters",
+              "type": "ListAuditEventsParams",
+              "optional": true
+            },
+            {
+              "name": "pageSize",
+              "type": "number",
+              "optional": true
+            },
+            {
+              "name": "onSelect",
+              "type": "(event: AuditEvent) => void",
+              "optional": true
+            },
+            {
+              "name": "renderItem",
+              "type": "(event: AuditEvent) => ReactNode",
+              "optional": true
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "optional": true
+            }
+          ],
+          "source": "packages/audit/src/components.tsx:9"
+        }
+      ]
+    }
+  ]
+}

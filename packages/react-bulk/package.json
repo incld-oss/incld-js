@@ -1,0 +1,19 @@
+{
+  "name": "@incld/react-bulk",
+  "version": "0.1.0",
+  "description": "React components for monitoring INCLD bulk operations",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {".": {"types": "./dist/index.d.ts", "import": "./dist/index.mjs", "require": "./dist/index.js"}, "./styles.css": "./dist/styles.css", "./styles/default.css": "./dist/styles.css"},
+  "scripts": {"build": "tsup", "typecheck": "tsc --noEmit"},
+  "peerDependencies": {"react": ">=18.0.0", "react-dom": ">=18.0.0"},
+  "dependencies": {"@incld/client": "0.1.0", "@incld/react": "0.1.0"},
+  "devDependencies": {"react": "^18.0.0", "react-dom": "^18.0.0", "@types/react": "^18.0.0", "@types/react-dom": "^18.0.0", "tsup": "^8.0.0", "typescript": "^5.5.0"},
+  "files": ["dist"],
+  "license": "MIT",
+  "repository": {"type": "git", "url": "git+https://github.com/incld-dev/incld-js.git", "directory": "packages/react-bulk"},
+  "homepage": "https://incld.dev/docs",
+  "bugs": {"url": "https://github.com/incld-dev/incld-js/issues"},
+  "publishConfig": {"access": "public", "provenance": true}
+}

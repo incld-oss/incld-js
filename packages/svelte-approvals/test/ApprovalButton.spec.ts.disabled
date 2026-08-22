@@ -1,0 +1,12 @@
+import { test, expect } from '@playwright/experimental-ct-svelte';
+import ApprovalButton from '../src/ApprovalButton.svelte';
+
+test('ApprovalButton renders', async ({ mount, page }) => {
+  await mount(ApprovalButton, {
+    props: {
+      approvalId: '123',
+      action: 'run'
+    }
+  });
+  await expect(page.getByRole('button', { name: 'Approval', exact: true })).toBeVisible();
+});
