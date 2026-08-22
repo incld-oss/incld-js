@@ -28,7 +28,7 @@
     "@incld/react": "0.1.0"
   },
   "devDependencies": {
-    "react": "^18.0.0",
+    "react": "^19.2.8",
     "react-dom": "^18.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
