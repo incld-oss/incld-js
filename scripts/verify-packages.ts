@@ -28,7 +28,7 @@ for (const directory of readdirSync(packagesDirectory, {withFileTypes: true})) {
   }
   if (!manifest.files?.includes('dist')) problems.push(`${label}: dist is not allowlisted for publication`);
   if (manifest.publishConfig?.access !== 'public') problems.push(`${label}: public npm access is not explicit`);
-  if (manifest.repository?.url !== 'git+https://github.com/incld-dev/incld-js.git') {
+  if (manifest.repository?.url !== 'git+https://github.com/incld-oss/incld-js.git') {
     problems.push(`${label}: repository URL does not match the trusted publisher repository`);
   }
   if (!manifest.repository?.directory) problems.push(`${label}: repository directory is missing`);

@@ -37,8 +37,8 @@
   },
   "files": ["dist"],
   "license": "MIT",
-  "repository": {"type": "git", "url": "git+https://github.com/incld-dev/incld-js.git", "directory": "packages/react-schedules"},
+  "repository": {"type": "git", "url": "git+https://github.com/incld-oss/incld-js.git", "directory": "packages/react-schedules"},
   "homepage": "https://incld.dev/docs",
-  "bugs": {"url": "https://github.com/incld-dev/incld-js/issues"},
+  "bugs": {"url": "https://github.com/incld-oss/incld-js/issues"},
   "publishConfig": {"access": "public", "provenance": true}
 }
