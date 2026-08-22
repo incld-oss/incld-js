@@ -1,0 +1,31 @@
+{
+  "name": "@incld/svelte-schedules",
+  "private": true,
+  "description": "Experimental unpublished Svelte scheduling components",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@incld/client": "workspace:*"
+  },
+  "scripts": {
+    "build": "svelte-package -i src -o dist --tsconfig tsconfig.json"
+  },
+  "devDependencies": {
+    "@sveltejs/package": "^2.5.0",
+    "svelte": "^5.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "svelte": "^5.0.0"
+  },
+  "files": ["dist"]
+}

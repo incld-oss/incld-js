@@ -1,0 +1,37 @@
+{
+  "name": "@incld/nextjs-approvals",
+  "private": true,
+  "description": "Compatibility re-exports for @incld/react-approvals and @incld/client/next",
+  "version": "0.1.0",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@incld/react-approvals": "workspace:*",
+    "@incld/react": "workspace:*",
+    "@incld/client": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tsup": "^8.0.0",
+    "react": "^18.0.0",
+    "next": "^16.3.1"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "next": ">=14.0.0 <17.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  }
+}

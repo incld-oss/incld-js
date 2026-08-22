@@ -1,0 +1,57 @@
+{
+  "name": "@incld/client",
+  "version": "0.1.0",
+  "description": "@incld universal SDK substrate for component APIs, framework adapters, and webhooks",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./express": {
+      "types": "./dist/webhooks/express.d.ts",
+      "import": "./dist/webhooks/express.mjs",
+      "require": "./dist/webhooks/express.js"
+    },
+    "./next": {
+      "types": "./dist/webhooks/next.d.ts",
+      "import": "./dist/webhooks/next.mjs",
+      "require": "./dist/webhooks/next.js"
+    },
+    "./sveltekit": {
+      "types": "./dist/webhooks/sveltekit.d.ts",
+      "import": "./dist/webhooks/sveltekit.mjs",
+      "require": "./dist/webhooks/sveltekit.js"
+    },
+    "./nuxt": {
+      "types": "./dist/webhooks/nuxt.d.ts",
+      "import": "./dist/webhooks/nuxt.mjs",
+      "require": "./dist/webhooks/nuxt.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/incld-dev/incld-js.git",
+    "directory": "packages/client"
+  },
+  "homepage": "https://incld.dev/docs",
+  "bugs": {"url": "https://github.com/incld-dev/incld-js/issues"},
+  "publishConfig": {"access": "public", "provenance": true}
+}
