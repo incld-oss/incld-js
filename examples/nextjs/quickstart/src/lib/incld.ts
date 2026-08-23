@@ -26,12 +26,10 @@ export const incld = createIncld({
  actions,
  async resolveContext() {
   const session = await auth()
-  if (!session?.user.id) return null
+  if (!session?.user.id || !session.organizationId) return null
   return {
    user: { id: session.user.id },
-   organization: session.organizationId
-    ? { id: session.organizationId }
-    : undefined,
+   organization: { id: session.organizationId },
    roles: session.user.roles,
    permissions: session.user.permissions,
   }

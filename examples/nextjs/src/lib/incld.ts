@@ -1,4 +1,5 @@
 import 'server-only';
+import {Incld} from '@incld/client';
 import {createIncld, defineActions} from '@incld/client/next';
 
 function required(name: 'INCLD_SECRET_KEY' | 'INCLD_WEBHOOK_SECRET') {
@@ -35,10 +36,26 @@ export const incld = createIncld({
   resolveContext: async () => {
     // Replace this demo identity with your auth provider's server-side session lookup.
     const userId = process.env.INCLD_DEMO_USER_ID;
-    return userId ? {user: {id: userId}, roles: ['member'], permissions: ['incld:use']} : null;
+    const organizationId = process.env.INCLD_DEMO_ORGANIZATION_ID;
+    return userId && organizationId
+      ? {
+          user: {id: userId},
+          organization: {id: organizationId},
+          roles: ['member'],
+          permissions: ['incld:use'],
+        }
+      : null;
   },
   authorize: async ({context}) => {
     // Keep product authorization here, next to the trusted session context.
     return context.permissions?.includes('incld:use') === true;
   },
 });
+
+export function incldForOrganization(organizationId: string) {
+  return new Incld({
+    apiKey: required('INCLD_SECRET_KEY'),
+    baseUrl: process.env.INCLD_API_URL,
+    scope: {organizationId},
+  });
+}

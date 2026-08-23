@@ -9,7 +9,7 @@ export interface BulkProgress {
   failedChunks: number; percentage: number;
 }
 export interface BulkOperation {
-  id: string; projectId: string; action: string; status: BulkOperationStatus;
+  id: string; projectId: string; externalOrganizationId?: string; action: string; status: BulkOperationStatus;
   metadata: Record<string, unknown>; chunkSize: number; progress: BulkProgress;
   startedAt?: string; completedAt?: string; cancelledAt?: string; createdAt: string; updatedAt: string;
 }
@@ -22,13 +22,13 @@ export interface BulkEvent {
   id: string; type: string; actorId?: string; data: Record<string, unknown>; createdAt: string;
 }
 export interface CreateBulkOperationInput<T extends Record<string, unknown> = Record<string, unknown>> {
-  action: string; items: T[]; chunkSize?: number; metadata?: Record<string, unknown>;
+  action: string; items: T[]; externalOrganizationId?: string; chunkSize?: number; metadata?: Record<string, unknown>;
 }
 export interface ListBulkOperationsParams extends PageParams {
-  status?: BulkOperationStatus; action?: string;
+  status?: BulkOperationStatus; action?: string; externalOrganizationId?: string;
 }
 interface OperationWire {
-  id: string; project_id: string; action: string; status: BulkOperationStatus;
+  id: string; project_id: string; external_organization_id?: string; action: string; status: BulkOperationStatus;
   metadata?: Record<string, unknown>; chunk_size: number; progress: Record<string, number>;
   started_at?: string; completed_at?: string; cancelled_at?: string;
   inserted_at: string; updated_at: string;
@@ -45,6 +45,7 @@ interface EventWire {
 const fromWire = (value: OperationWire): BulkOperation => ({
   id: value.id,
   projectId: value.project_id,
+  externalOrganizationId: value.external_organization_id,
   action: value.action,
   status: value.status,
   metadata: value.metadata ?? {},
@@ -89,7 +90,13 @@ export class BulkResource {
 
   async list(params?: ListBulkOperationsParams, options?: RequestOptions): Promise<Page<BulkOperation>> {
     const response = await this.client._request<PageWire<OperationWire>>(
-      'GET', '/bulk-operations', undefined, params, options,
+      'GET', '/bulk-operations', undefined, {
+        status: params?.status,
+        action: params?.action,
+        external_organization_id: params?.externalOrganizationId,
+        limit: params?.limit,
+        cursor: params?.cursor,
+      }, options,
     );
     return pageFromWire(response, fromWire);
   }
@@ -108,6 +115,7 @@ export class BulkResource {
     const response = await this.client._request<{data: OperationWire}>('POST', '/bulk-operations', {
       action: input.action,
       items: input.items,
+      external_organization_id: input.externalOrganizationId,
       chunk_size: input.chunkSize,
       metadata: input.metadata,
     }, undefined, options);

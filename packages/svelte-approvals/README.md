@@ -11,4 +11,4 @@ The package mirrors the React lifecycle surface:
 - `ApprovalHistory` renders immutable events and decisions; entries open into a full-detail modal and the complete audit envelope can be exported as JSON.
 - `ApprovalPolicyList` lists and manages `any`, `all` and `quorum` policies.
 
-Browser lifecycle commands should always flow through the incld proxy handler. The proxy derives actor identity from your application authentication and overwrites browser-supplied requester/reviewer fields before forwarding the command.
+Browser lifecycle commands should always flow through the incld proxy handler. The proxy derives the active organization and actor identity from your application authentication and overwrites browser-supplied tenant/requester/reviewer fields before forwarding the command.

@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: "@incld API"
   version: 1.0.0
-  description: Durable schedules, approvals, audit events, and bulk operations. JSON uses snake_case; SDKs expose idiomatic language naming.
+  description: Durable schedules, approvals, audit events, and bulk operations. Data-plane resources are isolated by project, external organization, and end user. A bearer key without protected scope headers is a project-administrator credential. Tenant servers send Incld-Organization-Id and may add Incld-User-Id; a user header without an organization is rejected. JSON uses snake_case; SDKs expose idiomatic language naming.
 servers:
   - url: https://api.incld.dev/v1
 security:
@@ -25,6 +25,26 @@ components:
       name: Idempotency-Key
       in: header
       schema: { type: string, maxLength: 255 }
+    OrganizationScope:
+      name: Incld-Organization-Id
+      in: header
+      schema: { type: string, minLength: 1, maxLength: 255 }
+      description: Protected organization boundary. Set from trusted server authentication, never browser input. Scoped SDK clients add this automatically.
+    UserScope:
+      name: Incld-User-Id
+      in: header
+      schema: { type: string, minLength: 1, maxLength: 255 }
+      description: Optional protected end-user boundary. Requires Incld-Organization-Id and is added automatically by user-scoped SDK clients and framework proxies.
+    ExternalOrganizationId:
+      name: external_organization_id
+      in: query
+      schema: { type: string, maxLength: 255 }
+      description: Administrator filter only. Scoped SDK clients and framework proxies use the protected organization header instead.
+    ExternalUserId:
+      name: external_user_id
+      in: query
+      schema: { type: string, maxLength: 255 }
+      description: Administrator filter only. User-scoped SDK clients and framework proxies use the protected user header instead.
   schemas:
     Error:
       type: object
@@ -99,16 +119,17 @@ components:
         ends: { type: object, additionalProperties: true }
     ScheduleInput:
       type: object
-      required: [action, external_user_id, recurrence, timezone]
+      required: [action, recurrence, timezone]
       properties:
         action:
           { type: string, description: Stable declared action identifier. }
         external_user_id:
           {
             type: string,
-            description: Required for direct server calls; framework proxies inject it.,
+            description: Required only for an unscoped administrator call; protected user scope injects and overrides it.,
           }
-        external_organization_id: { type: string }
+        external_organization_id:
+          { type: string, description: Required only for an unscoped administrator call; protected organization scope injects and overrides it. }
         payload: { type: object, additionalProperties: true }
         recurrence: { $ref: "#/components/schemas/Recurrence" }
         timezone: { type: string }
@@ -169,6 +190,7 @@ components:
         id: { type: string, format: uuid }
         schedule_id: { type: string, format: uuid }
         external_user_id: { type: string }
+        external_organization_id: { type: string, nullable: true }
         action: { $ref: "#/components/schemas/ActionSummary" }
         status:
           {
@@ -217,6 +239,7 @@ components:
       properties:
         id: { type: string, format: uuid }
         project_id: { type: string, format: uuid }
+        external_organization_id: { type: string, nullable: true }
         resource_type: { type: string }
         resource_id: { type: string }
         action: { type: string }
@@ -243,23 +266,33 @@ components:
         revoked_at: { type: string, format: date-time, nullable: true }
     ApprovalRequestInput:
       type: object
-      required: [resource_type, resource_id, action, requester_id]
+      required: [resource_type, resource_id, action]
       properties:
+        external_organization_id: { type: string, description: Required only for an unscoped administrator call; protected organization scope overrides it. }
         resource_type: { type: string }
         resource_id: { type: string }
         action: { type: string }
-        requester_id: { type: string }
+        requester_id: { type: string, description: Required unless protected user scope supplies it. }
         policy_id: { type: string, format: uuid }
         title: { type: string }
         description: { type: string }
         metadata: { type: object, additionalProperties: true }
         expires_at: { type: string, format: date-time }
+    ApprovalCheckInput:
+      type: object
+      required: [resource_type, resource_id, action]
+      properties:
+        external_organization_id: { type: string, description: Required only for an unscoped administrator call; protected organization scope overrides it. }
+        resource_type: { type: string }
+        resource_id: { type: string }
+        action: { type: string }
+        requester_id: { type: string, description: Required unless protected user scope supplies it. }
     ApprovalDecisionInput:
       type: object
-      required: [decision, approver_id]
+      required: [decision]
       properties:
         decision: { type: string, enum: [approved, rejected] }
-        approver_id: { type: string }
+        approver_id: { type: string, description: Required unless protected user scope supplies and overrides it. }
         reason: { type: string }
         inserted_at: { type: string, format: date-time }
         updated_at: { type: string, format: date-time }
@@ -277,12 +310,32 @@ components:
         ]
       properties:
         id: { type: string, format: uuid }
+        external_organization_id: { type: string, nullable: true }
         resource_pattern: { type: string }
         allowed_approvers: { type: array, items: { type: string } }
         mode: { type: string, enum: [any, all, quorum] }
         required_approvals: { type: integer, minimum: 1 }
         allow_self_approval: { type: boolean }
         revision: { type: integer }
+    ApprovalPolicyInput:
+      type: object
+      required: [resource_pattern, allowed_approvers]
+      properties:
+        external_organization_id:
+          { type: string, nullable: true, description: Omit only for an intentional project-global fallback policy. }
+        resource_pattern: { type: string }
+        allowed_approvers: { type: array, items: { type: string } }
+        mode: { type: string, enum: [any, all, quorum], default: any }
+        required_approvals: { type: integer, minimum: 1, default: 1 }
+        allow_self_approval: { type: boolean, default: false }
+    ApprovalPolicyUpdateInput:
+      type: object
+      properties:
+        resource_pattern: { type: string }
+        allowed_approvers: { type: array, items: { type: string } }
+        mode: { type: string, enum: [any, all, quorum] }
+        required_approvals: { type: integer, minimum: 1 }
+        allow_self_approval: { type: boolean }
     AuditEvent:
       type: object
       required:
@@ -301,6 +354,7 @@ components:
         component: { type: string }
         type: { type: string }
         actor_id: { type: string, nullable: true }
+        external_organization_id: { type: string, nullable: true }
         subject_type: { type: string, nullable: true }
         subject_id: { type: string, nullable: true }
         source: { type: string, enum: [system, manual] }
@@ -308,6 +362,20 @@ components:
         data: { type: object, additionalProperties: true }
         occurred_at: { type: string, format: date-time }
         inserted_at: { type: string, format: date-time }
+    AuditEventInput:
+      type: object
+      required: [type]
+      properties:
+        external_organization_id: { type: string, description: Required only for an unscoped administrator call; protected organization scope overrides it. }
+        type: { type: string }
+        actor_id: { type: string }
+        subject_type: { type: string }
+        subject_id: { type: string }
+        visibility: { type: string, enum: [project, participants, restricted], default: project }
+        participant_ids: { type: array, items: { type: string } }
+        allowed_viewer_ids: { type: array, items: { type: string } }
+        data: { type: object, additionalProperties: true }
+        occurred_at: { type: string, format: date-time }
     BulkOperation:
       type: object
       required:
@@ -325,6 +393,7 @@ components:
       properties:
         id: { type: string, format: uuid }
         project_id: { type: string, format: uuid }
+        external_organization_id: { type: string, nullable: true }
         action: { type: string }
         status:
           {
@@ -337,6 +406,19 @@ components:
         progress: { type: object, additionalProperties: true }
         inserted_at: { type: string, format: date-time }
         updated_at: { type: string, format: date-time }
+    BulkOperationInput:
+      type: object
+      required: [action, items]
+      properties:
+        external_organization_id: { type: string, description: Required only for an unscoped administrator call; protected organization scope overrides it. }
+        action: { type: string }
+        items:
+          type: array
+          minItems: 1
+          maxItems: 100000
+          items: { type: object, additionalProperties: true }
+        chunk_size: { type: integer, minimum: 1, maximum: 1000, default: 100 }
+        metadata: { type: object, additionalProperties: true }
   responses:
     Error:
       description: Error response
@@ -355,6 +437,7 @@ paths:
       responses: { "200": { description: Action page } }
     post:
       summary: Define or update an action
+      description: Project-administrator operation. Requests carrying protected tenant scope headers are forbidden.
       responses:
         {
           "201": { description: Action defined },
@@ -386,12 +469,19 @@ paths:
           "422": { $ref: "#/components/responses/Error" },
         }
   /schedules:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List schedules
       parameters:
         [
           { $ref: "#/components/parameters/Limit" },
           { $ref: "#/components/parameters/Cursor" },
+          { $ref: "#/components/parameters/ExternalOrganizationId" },
+          { $ref: "#/components/parameters/ExternalUserId" },
         ]
       responses: { "200": { description: Schedule page } }
     post:
@@ -413,7 +503,11 @@ paths:
         }
   /schedules/{id}:
     parameters:
-      [{ name: id, in: path, required: true, schema: { type: string } }]
+      [
+        { name: id, in: path, required: true, schema: { type: string } },
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: Get a schedule
       responses:
@@ -432,18 +526,33 @@ paths:
       summary: Delete a schedule
       responses: { "200": { description: Deleted schedule returned } }
   /schedules/{id}/pause:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     post:
       summary: Pause a schedule
       parameters:
         [{ name: id, in: path, required: true, schema: { type: string } }]
       responses: { "200": { description: Schedule paused } }
   /schedules/{id}/resume:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     post:
       summary: Resume a schedule
       parameters:
         [{ name: id, in: path, required: true, schema: { type: string } }]
       responses: { "200": { description: Schedule resumed } }
   /schedules/{id}/runs:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List schedule runs
       parameters:
@@ -451,9 +560,15 @@ paths:
           { name: id, in: path, required: true, schema: { type: string } },
           { $ref: "#/components/parameters/Limit" },
           { $ref: "#/components/parameters/Cursor" },
+          { $ref: "#/components/parameters/ExternalOrganizationId" },
         ]
       responses: { "200": { description: Run page } }
   /schedules/{id}/events:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List schedule events
       parameters:
@@ -461,18 +576,31 @@ paths:
           { name: id, in: path, required: true, schema: { type: string } },
           { $ref: "#/components/parameters/Limit" },
           { $ref: "#/components/parameters/Cursor" },
+          { $ref: "#/components/parameters/ExternalOrganizationId" },
         ]
       responses: { "200": { description: Event page } }
   /runs:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List project runs
       parameters:
         [
           { $ref: "#/components/parameters/Limit" },
           { $ref: "#/components/parameters/Cursor" },
+          { $ref: "#/components/parameters/ExternalOrganizationId" },
+          { $ref: "#/components/parameters/ExternalUserId" },
         ]
       responses: { "200": { description: Run page } }
   /runs/{id}:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: Get a run
       parameters:
@@ -483,16 +611,32 @@ paths:
           "404": { $ref: "#/components/responses/Error" },
         }
   /approvals/check:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     post:
       summary: Check approval status for a resource action
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ApprovalCheckInput" }
       responses: { "200": { description: Approval check returned } }
   /approvals:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List approvals
       parameters:
         [
           { $ref: "#/components/parameters/Limit" },
           { $ref: "#/components/parameters/Cursor" },
+          { $ref: "#/components/parameters/ExternalOrganizationId" },
         ]
       responses: { "200": { description: Approval page } }
     post:
@@ -517,7 +661,11 @@ paths:
         }
   /approvals/{id}:
     parameters:
-      [{ name: id, in: path, required: true, schema: { type: string } }]
+      [
+        { name: id, in: path, required: true, schema: { type: string } },
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: Get an approval
       responses: { "200": { description: Approval returned } }
@@ -532,6 +680,11 @@ paths:
       summary: Cancel and remove an approval
       responses: { "200": { description: Approval returned } }
   /approvals/{id}/decisions:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     post:
       summary: Submit an approval decision
       parameters:
@@ -557,18 +710,33 @@ paths:
           "409": { $ref: "#/components/responses/Error" },
         }
   /approvals/{id}/cancel:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     post:
       summary: Cancel a pending approval
       parameters:
         [{ name: id, in: path, required: true, schema: { type: string } }]
       responses: { "200": { description: Approval returned } }
   /approvals/{id}/revoke:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     post:
       summary: Revoke an approved approval
       parameters:
         [{ name: id, in: path, required: true, schema: { type: string } }]
       responses: { "200": { description: Approval returned } }
   /approvals/{id}/events:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List approval events
       parameters:
@@ -579,67 +747,119 @@ paths:
         ]
       responses: { "200": { description: Event page } }
   /approval-policies:
+    parameters:
+      [{ $ref: "#/components/parameters/OrganizationScope" }]
     get:
       summary: List approval policies
       responses: { "200": { description: Policy page } }
     post:
       summary: Create an approval policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ApprovalPolicyInput" }
       responses: { "201": { description: Policy created } }
   /approval-policies/{id}:
     parameters:
-      [{ name: id, in: path, required: true, schema: { type: string } }]
+      [
+        { name: id, in: path, required: true, schema: { type: string } },
+        { $ref: "#/components/parameters/OrganizationScope" },
+      ]
     get:
       summary: Get an approval policy
       responses: { "200": { description: Policy returned } }
     patch:
       summary: Update an approval policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ApprovalPolicyUpdateInput" }
       responses: { "200": { description: Policy updated } }
     delete:
       summary: Delete an approval policy
       responses: { "200": { description: Policy returned } }
   /audit-events:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List audit events
       parameters:
         [
           { $ref: "#/components/parameters/Limit" },
           { $ref: "#/components/parameters/Cursor" },
+          { $ref: "#/components/parameters/ExternalOrganizationId" },
         ]
       responses: { "200": { description: Audit event page } }
     post:
       summary: Create a manual audit event
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AuditEventInput" }
       responses: { "201": { description: Audit event created } }
   /audit-events/{id}:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: Get an audit event
       parameters:
         [{ name: id, in: path, required: true, schema: { type: string } }]
       responses: { "200": { description: Audit event returned } }
   /bulk-operations:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List bulk operations
       parameters:
         [
           { $ref: "#/components/parameters/Limit" },
           { $ref: "#/components/parameters/Cursor" },
+          { $ref: "#/components/parameters/ExternalOrganizationId" },
         ]
       responses: { "200": { description: Bulk operation page } }
     post:
       summary: Create a bulk operation
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/BulkOperationInput" }
       responses:
         {
           "201": { description: Bulk operation created },
           "402": { $ref: "#/components/responses/Error" },
         }
   /bulk-operations/{id}:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: Get a bulk operation
       parameters:
         [{ name: id, in: path, required: true, schema: { type: string } }]
       responses: { "200": { description: Bulk operation returned } }
   /bulk-operations/{id}/chunks:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List operation chunks
       parameters:
@@ -650,6 +870,11 @@ paths:
         ]
       responses: { "200": { description: Bulk chunk page } }
   /bulk-operations/{id}/events:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     get:
       summary: List operation events
       parameters:
@@ -660,6 +885,11 @@ paths:
         ]
       responses: { "200": { description: Event page } }
   /bulk-operations/{id}/cancel:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     post:
       summary: Cancel a bulk operation
       parameters:
@@ -670,6 +900,11 @@ paths:
           "409": { $ref: "#/components/responses/Error" },
         }
   /sessions:
+    parameters:
+      [
+        { $ref: "#/components/parameters/OrganizationScope" },
+        { $ref: "#/components/parameters/UserScope" },
+      ]
     post:
       summary: Create an end-user session token
       responses: { "200": { description: Session token returned } }

@@ -53,7 +53,7 @@ Required `scheduleId`. Optional `onUpdated(schedule)`, `onDeleted(schedule)`, `c
 
 ### RunHistory
 
-Optional `scheduleId`, `filters?: ListRunsParams`, `locale`, `timeZone`, `className`, and async renderers. Without `scheduleId`, it uses the project-wide Run list scoped by the proxy.
+Optional `scheduleId`, `filters?: ListRunsParams`, `locale`, `timeZone`, `className`, and async renderers. Without `scheduleId`, it uses the Run list constrained to the active organization and user by the proxy.
 
 ### NextRun
 
@@ -63,7 +63,7 @@ Supply `schedule` or `scheduleId`. Optional `format='both'` (`relative | absolut
 
 - `useSchedules(params?)` → async `Page<Schedule>`.
 - `useSchedule(id?)` → async `Schedule | undefined`.
-- `useRuns(params?, scheduleId?)` → schedule-specific or project-wide async `Page<Run>`.
+- `useRuns(params?, scheduleId?)` → schedule-specific or active-tenant async `Page<Run>`.
 - `useSchedulePreview({recurrence}?)` → five canonical occurrences.
 - `useScheduleMutation()` → `{pending, error, create(input), update(id, input), pause(id), resume(id), remove(id)}`. Successful mutations refresh provider queries.
 - `recurrenceSummary(recurrence)`, `scheduleSummary(schedule)`, and `formatDate(value, locale?, timeZone?)` are exported for custom rows.

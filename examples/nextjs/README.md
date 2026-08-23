@@ -4,34 +4,33 @@ This app is the copyable reference for the supported React components and Next.j
 
 ## Run it
 
-Use Node.js 20.9 or newer. Build the SDK packages from the repository root,
-then install and run the example:
+Initialize Phoenix once with `just setup` (or use `just reset` when you want a
+clean database). Then, from the repository root, reconcile the demo, build the
+local packages, configure the server integration, and start the example:
 
 ```bash
-bun install
-bun run build
-
-cd examples/nextjs
-npm ci
-cp .env.example .env.local
-npm run dev
+just next-setup
+just next-dev
 ```
 
-Replace the placeholders in `.env.local` with a development project's secret
-key, webhook secret, API URL, and a user identifier from your application's
-server-side session. Register
-`http://localhost:3000/api/incld/webhook` as the development webhook URL.
+Run `just dev` in a second terminal for the Phoenix API. The checked-in
+`.env.example` contains the deterministic credentials created by `just setup` or
+`just reset`; they are intentionally local-only and must not be deployed. The
+default local API is `http://localhost:4000`; override `INCLD_API_URL` for another
+environment. Register the webhook URL as
+`http://localhost:3000/api/incld/webhook`.
 
-The playground exposes a **Sync demo actions** control for local testing.
-Production deployments should run `await incld.syncActions()` from a release
-task whenever declarations change.
+The playground exposes a **Sync demo actions** control for local testing. With
+both servers running, the same operation is available from the terminal as
+`just sync-actions`. Production deployments should run
+`await incld.syncActions()` from a release task whenever declarations change.
 
 The page deliberately mounts every public component surface: create and edit schedules, run history, approval requests and policy management, approval gates and decisions, server-created Bulk operations, and controlled Audit filters. Use it as both a copyable App Router integration and a manual SDK regression harness.
 
 Run the complete static verification with:
 
 ```bash
-npm run verify
+just next-verify
 ```
 
 This also verifies the documentation quickstart in `quickstart/`. That fixture is
@@ -43,9 +42,11 @@ provider setup, action declarations, and synchronization stay executable. Next.j
 ## Trust boundary
 
 - Browser components call `/api/incld/v1` with no project key.
-- `src/lib/incld.ts` resolves the authenticated user on the server and owns authorization.
+- `src/lib/incld.ts` resolves the authenticated user and active organization on the server and owns authorization.
 - Protected identity fields supplied by the browser are discarded recursively.
+- The proxy requires both identities, and the API enforces the organization boundary on every tenant-bound query and mutation.
 - Webhook delivery has its own route and signature verification.
 - Bulk creation stays server-side; the browser receives monitoring and cancellation capabilities.
+- Server-side tenant jobs construct a scoped client, so list, direct-ID, and mutation requests all retain the same organization boundary.
 
-Replace `INCLD_DEMO_USER_ID` with a real server-side session lookup before adapting this example to an application.
+Replace `INCLD_DEMO_USER_ID` and `INCLD_DEMO_ORGANIZATION_ID` with a real server-side session and active-organization lookup before adapting this example to an application. Never accept the organization ID directly from browser request data.

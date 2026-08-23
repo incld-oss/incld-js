@@ -1,6 +1,6 @@
 {
   "name": "@incld/react-schedules",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "@incld React components for durable user-controlled scheduling",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -24,8 +24,8 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@incld/client": "0.1.0",
-    "@incld/react": "0.1.0"
+    "@incld/client": "0.1.1",
+    "@incld/react": "0.1.1"
   },
   "devDependencies": {
     "react": "^18.0.0",

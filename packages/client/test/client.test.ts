@@ -69,6 +69,35 @@ describe('Incld clients', () => {
     catch (error) { expect(error).toBeInstanceOf(ValidationError); expect((error as ValidationError).fields).toEqual({action: ['is unknown']}); expect((error as ValidationError).requestId).toBe('req_1'); }
   });
 
+  test('server scope protects tenant headers from per-request overrides', async () => {
+    const fetcher = mock(() => Promise.resolve(Response.json({data: [], meta: {has_more: false, next_cursor: null}})));
+    const client = new Incld({
+      apiKey: 'sk_test',
+      scope: {organizationId: 'org_trusted', userId: 'user_trusted'},
+      fetch: fetcher,
+    });
+
+    await client.schedules.list(undefined, {
+      headers: {
+        Authorization: 'Bearer spoofed',
+        'Incld-Organization-Id': 'org_spoofed',
+        'Incld-User-Id': 'user_spoofed',
+      },
+    });
+
+    const headers = fetcher.mock.calls[0][1]?.headers as Record<string, string>;
+    expect(headers.Authorization).toBe('Bearer sk_test');
+    expect(headers['Incld-Organization-Id']).toBe('org_trusted');
+    expect(headers['Incld-User-Id']).toBe('user_trusted');
+  });
+
+  test('rejects empty server scope identifiers', () => {
+    expect(() => new Incld({apiKey: 'sk_test', scope: {organizationId: '  '}}))
+      .toThrow('requires an organizationId');
+    expect(() => new Incld({apiKey: 'sk_test', scope: {organizationId: 'org_trusted', userId: ''}}))
+      .toThrow('userId must not be empty');
+  });
+
   test('distinguishes forbidden responses from authentication failures', async () => {
     const client = new Incld({apiKey: 'sk_test', fetch: mock(() => Promise.resolve(Response.json({error: {code: 'component_not_enabled', message: 'Not enabled'}}, {status: 403})))});
     expect(client.actions.list()).rejects.toThrow(ForbiddenError);

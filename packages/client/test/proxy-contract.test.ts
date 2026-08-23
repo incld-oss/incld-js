@@ -29,8 +29,8 @@ const expected = new Map<string, string>([
   ['POST /approvals/{id}/revoke', 'approvals.decide'],
   ['GET /approvals/{id}/events', 'approvals.history'],
   ['GET /approval-policies', 'approval_policies.read'],
-  ['POST /approval-policies', 'approval_policies.create'],
   ['GET /approval-policies/{id}', 'approval_policies.read'],
+  ['POST /approval-policies', 'approval_policies.create'],
   ['PATCH /approval-policies/{id}', 'approval_policies.update'],
   ['DELETE /approval-policies/{id}', 'approval_policies.delete'],
   ['GET /audit-events', 'audit.read'],
@@ -71,7 +71,7 @@ function concretePath(path: string) {
 }
 
 describe('browser proxy and OpenAPI contract', () => {
-  test('covers every public operation except the two documented server-only writes', () => {
+  test('covers every public operation except documented server-only writes', () => {
     const documented = openApiOperations();
     expect(documented).toHaveLength(40);
     expect(new Set([...expected.keys(), ...serverOnly])).toEqual(new Set(documented));

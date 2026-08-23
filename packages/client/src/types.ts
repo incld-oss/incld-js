@@ -83,7 +83,7 @@ export interface ScheduleInput {
 }
 export type UpdateScheduleInput = Partial<ScheduleInput>;
 export interface ListSchedulesParams extends PageParams {
-  externalUserId?: string; action?: string; status?: Schedule['status'];
+  externalUserId?: string; externalOrganizationId?: string; action?: string; status?: Schedule['status'];
 }
 export interface SchedulePreviewInput { recurrence: Recurrence; count?: number; from?: string }
 export interface SchedulePreviewOccurrence {
@@ -96,6 +96,7 @@ export interface Run {
   id: string;
   scheduleId: string;
   externalUserId?: string;
+  externalOrganizationId?: string;
   action: ActionSummary;
   status: 'scheduled' | 'delivering' | 'delivered' | 'retrying' | 'succeeded' | 'failed' | 'cancelled' | 'skipped';
   nominalAt: string;
@@ -111,7 +112,7 @@ export interface Run {
   updatedAt: string;
 }
 export interface ListRunsParams extends PageParams {
-  externalUserId?: string; status?: Run['status']; action?: string;
+  externalUserId?: string; externalOrganizationId?: string; status?: Run['status']; action?: string;
   scheduleId?: string; search?: string;
 }
 

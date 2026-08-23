@@ -20,7 +20,7 @@ import '@incld/react-approvals/styles.css';
 {approvalId && <ApprovalDetails approvalId={approvalId} />}
 ```
 
-Do not pass `requesterId`, reviewer identity, or actor identity from React. Those fields exist on shared server types, but the browser proxy removes them and injects `context.user.id`.
+Do not pass `externalOrganizationId`, `requesterId`, reviewer identity, or actor identity from React. Those fields exist on shared server types, but the browser proxy removes them and injects the active `context.organization.id` and `context.user.id`.
 
 ## Request components
 
@@ -60,7 +60,7 @@ Required props are `resourceType`, `resourceId`, `action`, and `children`; optio
 - `ApprovalPolicyList`: `onSelect?(id)`, `selectedId?`, `className?`.
 - `ApprovalPolicyEditor`: `policy?` for edit mode, `onSaved?(policy)`, `onDeleted?(policy)`, `className?`. Without `policy`, it creates.
 
-Restrict `approval_policies.create`, `.update`, and `.delete` in the framework `authorize` callback.
+Explicitly authorize `approval_policies.read`, `.create`, `.update`, and `.delete` in the framework callback. The proxy denies all four when no callback is configured. Organization admins can manage only their own policies; project-global fallbacks remain trusted-server managed.
 
 ## Hooks
 

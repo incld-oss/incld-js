@@ -9,7 +9,12 @@ npm install @incld/client @incld/react @incld/react-bulk
 Bulk creation is intentionally excluded from the browser proxy. Validate the items and authorization in trusted server code:
 
 ```ts
-const operation = await incld.client.bulkOperations.create({
+const tenantIncld = new Incld({
+  apiKey: process.env.INCLD_SECRET_KEY!,
+  scope: {organizationId: session.organization.id},
+});
+
+const operation = await tenantIncld.bulkOperations.create({
   action: 'sync_contacts',
   items: contacts.map(contact => ({id: contact.id})),
   chunkSize: 250,
@@ -17,7 +22,7 @@ const operation = await incld.client.bulkOperations.create({
 }, {idempotencyKey: `contacts:${importId}`});
 ```
 
-Then render browser monitoring UI inside `IncldProvider`:
+Derive the organization from the authenticated server session, never the request body. Scoping the client ensures direct-ID reads and mutations remain inside that organization too. Then render browser monitoring UI inside `IncldProvider`:
 
 ```tsx
 import {BulkOperationDetails, BulkOperationList} from '@incld/react-bulk';

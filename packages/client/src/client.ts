@@ -20,6 +20,12 @@ export interface IncldOptions {
   baseUrl?: string;
   timeoutMs?: number;
   fetch?: typeof globalThis.fetch;
+  scope?: IncldServerScope;
+}
+
+export interface IncldServerScope {
+  organizationId: string;
+  userId?: string;
 }
 
 export interface IncldBrowserOptions {
@@ -104,8 +110,8 @@ abstract class BaseClient implements RequestClient {
 
     const headers: Record<string, string> = {
       Accept: 'application/json',
-      ...this.authenticationHeaders(),
       ...this.customHeaders(options),
+      ...this.authenticationHeaders(),
     };
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (options?.idempotencyKey) headers['Idempotency-Key'] = options.idempotencyKey;
@@ -159,14 +165,28 @@ abstract class BaseClient implements RequestClient {
 
 export class Incld extends BaseClient {
   readonly apiKey: string;
+  readonly scope?: IncldServerScope;
 
   constructor(options: IncldOptions) {
     if (!options?.apiKey) throw new Error('Incld requires an apiKey.');
+    if (options.scope && !options.scope.organizationId?.trim()) {
+      throw new Error('Incld server scope requires an organizationId.');
+    }
+    if (options.scope?.userId !== undefined && !options.scope.userId.trim()) {
+      throw new Error('Incld server scope userId must not be empty.');
+    }
     super(options.baseUrl ?? 'https://api.incld.dev', options.timeoutMs ?? 10_000, options.fetch);
     this.apiKey = options.apiKey;
+    this.scope = options.scope ? {...options.scope} : undefined;
   }
 
-  protected authenticationHeaders() { return {Authorization: `Bearer ${this.apiKey}`}; }
+  protected authenticationHeaders() {
+    return {
+      Authorization: `Bearer ${this.apiKey}`,
+      ...(this.scope?.organizationId ? {'Incld-Organization-Id': this.scope.organizationId} : {}),
+      ...(this.scope?.userId ? {'Incld-User-Id': this.scope.userId} : {}),
+    };
+  }
   protected customHeaders(options?: RequestOptions) { return options?.headers ?? {}; }
 }
 

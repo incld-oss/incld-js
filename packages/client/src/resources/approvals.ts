@@ -18,13 +18,14 @@ export interface ApprovalPolicySnapshot {
   mode?: ApprovalPolicyMode; requiredApprovals?: number; allowSelfApproval?: boolean;
 }
 export interface ApprovalPolicy {
-  id: string; projectId: string; resourcePattern: string; allowedApprovers: string[];
+  id: string; projectId: string; externalOrganizationId?: string; resourcePattern: string; allowedApprovers: string[];
   mode: ApprovalPolicyMode; requiredApprovals: number; allowSelfApproval: boolean;
   revision: number; createdAt: string; updatedAt: string;
 }
 export interface Approval {
   id: string;
   projectId: string;
+  externalOrganizationId?: string;
   resourceType: string;
   resourceId: string;
   action: string;
@@ -48,7 +49,7 @@ export interface Approval {
 }
 
 interface ApprovalWire {
-  id: string; project_id: string; resource_type: string; resource_id: string; action: string;
+  id: string; project_id: string; external_organization_id?: string; resource_type: string; resource_id: string; action: string;
   requester_id?: string; approver_id?: string; status: ApprovalStatus; title?: string;
   description?: string; metadata?: Record<string, unknown>; revision?: number; policy_id?: string;
   policy_snapshot?: Record<string, any>; expires_at?: string; resolved_at?: string;
@@ -58,12 +59,13 @@ interface ApprovalWire {
   inserted_at: string; updated_at: string;
 }
 interface PolicyWire {
-  id: string; project_id: string; resource_pattern: string; allowed_approvers: string[];
+  id: string; project_id: string; external_organization_id?: string; resource_pattern: string; allowed_approvers: string[];
   mode: ApprovalPolicyMode; required_approvals: number; allow_self_approval: boolean;
   revision: number; inserted_at: string; updated_at: string;
 }
 
 export interface ApprovalRequestInput {
+  externalOrganizationId?: string;
   policy?: string;
   resourceType: string;
   resourceId: string;
@@ -78,16 +80,18 @@ export interface UpdateApprovalInput {
   title?: string; description?: string; metadata?: Record<string, unknown>; expiresAt?: string;
 }
 export interface ApprovalCheckInput {
-  resourceType: string; resourceId: string; action: string; requesterId?: string;
+  resourceType: string; resourceId: string; action: string; requesterId?: string; externalOrganizationId?: string;
 }
 export interface ApprovalCheck {
   approved: boolean; status: ApprovalStatus | 'none'; approvalId?: string;
 }
 export interface ListApprovalsParams extends PageParams {
+  externalOrganizationId?: string;
   resourceId?: string; requesterId?: string; approverId?: string; status?: ApprovalStatus;
   view?: 'assigned' | 'requested' | 'all';
 }
 export interface CreateApprovalPolicyInput {
+  externalOrganizationId?: string;
   resourcePattern: string; allowedApprovers: string[]; mode?: ApprovalPolicyMode;
   requiredApprovals?: number; allowSelfApproval?: boolean;
 }
@@ -113,6 +117,7 @@ const eventFromWire = (event: NonNullable<ApprovalWire['events']>[number]): Appr
 const fromWire = (approval: ApprovalWire): Approval => ({
   id: approval.id,
   projectId: approval.project_id,
+  externalOrganizationId: approval.external_organization_id,
   resourceType: approval.resource_type,
   resourceId: approval.resource_id,
   action: approval.action,
@@ -144,6 +149,7 @@ const fromWire = (approval: ApprovalWire): Approval => ({
 const policyFromWire = (policy: PolicyWire): ApprovalPolicy => ({
   id: policy.id,
   projectId: policy.project_id,
+  externalOrganizationId: policy.external_organization_id,
   resourcePattern: policy.resource_pattern,
   allowedApprovers: policy.allowed_approvers,
   mode: policy.mode,
@@ -160,6 +166,7 @@ export class ApprovalsResource {
   async list(params?: ListApprovalsParams, options?: RequestOptions): Promise<Page<Approval>> {
     const response = await this.client._request<PageWire<ApprovalWire>>('GET', '/approvals', undefined, {
       resource_id: params?.resourceId,
+      external_organization_id: params?.externalOrganizationId,
       requester_id: params?.requesterId,
       approver_id: params?.approverId,
       status: params?.status,
@@ -184,6 +191,7 @@ export class ApprovalsResource {
         resource_id: input.resourceId,
         action: input.action,
         requester_id: input.requesterId,
+        external_organization_id: input.externalOrganizationId,
       }, undefined, options,
     );
     return {approved: response.data.approved, status: response.data.status, approvalId: response.data.approval_id};
@@ -196,6 +204,7 @@ export class ApprovalsResource {
       resource_id: input.resourceId,
       action: input.action,
       requester_id: input.requesterId,
+      external_organization_id: input.externalOrganizationId,
       title: input.title,
       description: input.description,
       metadata: input.metadata,
@@ -305,6 +314,7 @@ export class ApprovalPoliciesResource {
 
   private toWire(input: Partial<CreateApprovalPolicyInput>) {
     return {
+      external_organization_id: input.externalOrganizationId,
       resource_pattern: input.resourcePattern,
       allowed_approvers: input.allowedApprovers,
       mode: input.mode,

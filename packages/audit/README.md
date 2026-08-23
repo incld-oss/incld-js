@@ -1,6 +1,6 @@
 # @incld/react-audit
 
-React components and read hooks for a unified, viewer-aware lifecycle and application Audit trail. Audit is not available on Developer; it unlocks when any paid component is active.
+React components and read hooks for a viewer-scoped chronological trail of Incld lifecycle events and application events. Audit is not available on Developer; it becomes available when any paid component is active.
 
 ```bash
 npm install @incld/client @incld/react @incld/react-audit
@@ -37,9 +37,13 @@ Viewer and event actor identity are bound by the trusted proxy and are never com
 There is no React mutation hook. For a browser-authorized manual event, call `useIncld().client.auditEvents.create(input)`. For server outcomes, prefer the trusted server client:
 
 ```ts
-await incld.auditEvents.create({
+const tenantIncld = new Incld({
+  apiKey: process.env.INCLD_SECRET_KEY!,
+  scope: {organizationId: organization.id, userId: user.id},
+});
+
+await tenantIncld.auditEvents.create({
   type: 'report.exported',
-  actorId: user.id,
   subjectType: 'report',
   subjectId: report.id,
   visibility: 'participants',

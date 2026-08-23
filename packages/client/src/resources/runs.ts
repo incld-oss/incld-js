@@ -3,7 +3,7 @@ import type {ListRunsParams, Page, RequestOptions, Run} from '../types.js';
 import {pageFromWire, type PageWire} from './shared.js';
 
 export interface RunWire {
-  id: string; schedule_id: string; external_user_id?: string;
+  id: string; schedule_id: string; external_user_id?: string; external_organization_id?: string;
   action: {identifier: string; display_name: string}; status: Run['status'];
   nominal_at: string; scheduled_at: string; started_at: string | null;
   completed_at: string | null; attempt_count: number;
@@ -15,6 +15,7 @@ export const runFromWire = (run: RunWire): Run => ({
   id: run.id,
   scheduleId: run.schedule_id,
   externalUserId: run.external_user_id,
+  externalOrganizationId: run.external_organization_id,
   action: {identifier: run.action.identifier, displayName: run.action.display_name},
   status: run.status,
   nominalAt: run.nominal_at,
@@ -41,6 +42,7 @@ export class RunsResource {
       action: params?.action,
       schedule_id: params?.scheduleId,
       external_user_id: params?.externalUserId,
+      external_organization_id: params?.externalOrganizationId,
       search: params?.search,
     }, options);
     return pageFromWire(response, runFromWire);

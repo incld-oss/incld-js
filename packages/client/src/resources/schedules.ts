@@ -74,6 +74,7 @@ export class SchedulesResource {
   async list(params?: ListSchedulesParams, options?: RequestOptions): Promise<Page<Schedule>> {
     const response = await this.client._request<PageWire<ScheduleWire>>('GET', '/schedules', undefined, {
       external_user_id: params?.externalUserId,
+      external_organization_id: params?.externalOrganizationId,
       action: params?.action,
       status: params?.status,
       limit: params?.limit,

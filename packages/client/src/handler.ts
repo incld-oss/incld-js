@@ -6,7 +6,7 @@ export type MaybePromise<T> = T | Promise<T>;
 
 export interface IncldContext {
   user: {id: string};
-  organization?: {id: string};
+  organization: {id: string};
   roles?: string[];
   permissions?: string[];
   claims?: Record<string, unknown>;
@@ -168,11 +168,15 @@ function injectContext(
   const userId = context.user.id;
   const organizationId = context.organization?.id;
 
-  if (path.startsWith('/schedules') || path.startsWith('/runs')) {
+  if (organizationId) {
+    if (method === 'GET') query.set('external_organization_id', organizationId);
+    else body.external_organization_id = organizationId;
+  }
+
+  if ((path.startsWith('/schedules') && path !== '/schedules/preview') || path.startsWith('/runs')) {
     if (method === 'GET') query.set('external_user_id', userId);
     else {
       body.external_user_id = userId;
-      if (organizationId) body.external_organization_id = organizationId;
     }
   }
 
@@ -270,6 +274,14 @@ export function createCoreIntegration<Context extends IncldContext = IncldContex
 
     const context = await options.resolveContext(request, native);
     if (!context?.user?.id) return errorResponse(401, 'context_required', 'An authenticated application context is required.');
+    const organizationRequired = operation.resource !== 'actions' && operation.operation !== 'schedules.preview';
+    if (organizationRequired && !context.organization?.id) {
+      return errorResponse(403, 'organization_context_required', 'A trusted organization context is required for this operation.');
+    }
+    const explicitAuthorizationRequired = operation.resource === 'bulk-operations' || operation.resource === 'approval-policies';
+    if (explicitAuthorizationRequired && !options.authorize) {
+      return errorResponse(403, 'authorization_required', 'This operation requires an explicit application authorization policy.');
+    }
     if (options.authorize && !(await options.authorize({...operation, context, request}))) {
       return errorResponse(403, 'context_forbidden', 'The application denied this operation.');
     }
@@ -291,6 +303,10 @@ export function createCoreIntegration<Context extends IncldContext = IncldContex
       Accept: 'application/json',
       Authorization: `Bearer ${options.apiKey}`,
     };
+    if (context.organization?.id) {
+      headers['Incld-User-Id'] = context.user.id;
+      headers['Incld-Organization-Id'] = context.organization.id;
+    }
     const idempotencyKey = request.headers.get('idempotency-key');
     if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;
     if (!['GET', 'HEAD'].includes(request.method)) headers['Content-Type'] = 'application/json';
@@ -326,6 +342,19 @@ export function createCoreIntegration<Context extends IncldContext = IncldContex
     if (action) {
       const declaration = options.actions?.[action.identifier];
       if (!declaration) return errorResponse(422, 'action_not_declared', `No handler is declared for ${action.identifier}.`);
+      const organizationId = action.context?.organization_id;
+      const userId = action.context?.user_id;
+      const actionClient = typeof organizationId === 'string' && organizationId
+        ? new Incld({
+            apiKey: options.apiKey,
+            baseUrl: options.baseUrl,
+            fetch: options.fetch,
+            scope: {
+              organizationId,
+              ...(typeof userId === 'string' && userId ? {userId} : {}),
+            },
+          })
+        : client;
       await declaration.run({
         action: action.identifier,
         payload: action.payload,
@@ -337,7 +366,7 @@ export function createCoreIntegration<Context extends IncldContext = IncldContex
           context: action.context,
         },
         request,
-        client,
+        client: actionClient,
       });
     }
     return Response.json({data: {received: true}});

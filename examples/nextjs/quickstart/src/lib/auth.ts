@@ -4,7 +4,7 @@ export interface QuickstartSession {
     roles: string[];
     permissions: string[];
   };
-  organizationId?: string;
+  organizationId: string;
 }
 
 export async function auth(): Promise<QuickstartSession | null> {
