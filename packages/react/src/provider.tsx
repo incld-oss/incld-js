@@ -103,7 +103,7 @@ const variableNames: Record<keyof IncldThemeVariables, `--incld-${string}`> = {
   focusRing: '--incld-focus-ring',
 };
 
-function themeStyle(variables: IncldThemeVariables): CSSProperties {
+export function themeStyle(variables: IncldThemeVariables): CSSProperties {
   return Object.fromEntries(
     Object.entries(variables)
       .filter((entry): entry is [keyof IncldThemeVariables, string] => typeof entry[1] === 'string')

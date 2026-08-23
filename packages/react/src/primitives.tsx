@@ -1,6 +1,7 @@
-import React, {useEffect, useId, useRef, type ButtonHTMLAttributes, type ReactNode} from 'react';
+import React, {useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type ReactNode} from 'react';
+import {createPortal} from 'react-dom';
 import type {IncldError} from '@incld/client';
-import {useIncldLabel} from './provider.js';
+import {themeStyle, useIncld, useIncldLabel} from './provider.js';
 
 export interface AsyncViewProps {
   loading?: ReactNode;
@@ -75,12 +76,15 @@ export interface IncldDialogProps {
 
 export function IncldDialog({open, onOpenChange, title, description, className = '', backdropClassName = '', closeLabel, children}: IncldDialogProps) {
   const panel = useRef<HTMLDivElement>(null);
+  const [portalReady, setPortalReady] = useState(false);
+  const {appearance} = useIncld();
   const id = useId();
   const titleId = `incld-dialog-title-${id}`;
   const descriptionId = `incld-dialog-description-${id}`;
   const resolvedCloseLabel = closeLabel ?? useIncldLabel('close', 'Close');
+  useEffect(() => setPortalReady(true), []);
   useEffect(() => {
-    if (!open) return;
+    if (!open || !portalReady) return;
     const previous = document.activeElement as HTMLElement | null;
     panel.current?.focus();
     const onKeyDown = (event: KeyboardEvent) => {
@@ -106,23 +110,33 @@ export function IncldDialog({open, onOpenChange, title, description, className =
     };
     document.addEventListener('keydown', onKeyDown);
     return () => { document.removeEventListener('keydown', onKeyDown); previous?.focus(); };
-  }, [open, onOpenChange]);
-  if (!open) return null;
-  return (
-    <div className={`incld-dialog-backdrop ${backdropClassName}`.trim()} role="presentation" onMouseDown={() => onOpenChange(false)}>
-      <div
-        ref={panel}
-        className={`incld-dialog ${className}`.trim()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        aria-describedby={description ? descriptionId : undefined}
-        tabIndex={-1}
-        onMouseDown={event => event.stopPropagation()}
-      >
-        <header><div><h2 id={titleId}>{title}</h2>{description && <p id={descriptionId}>{description}</p>}</div><button type="button" aria-label={resolvedCloseLabel} className="incld-icon-button" onClick={() => onOpenChange(false)}>×</button></header>
-        {children}
+  }, [open, onOpenChange, portalReady]);
+  if (!open || !portalReady) return null;
+  return createPortal(
+    <div
+      className="incld-root incld-dialog-portal"
+      data-color-scheme={appearance.colorScheme}
+      data-accent={appearance.accentColor}
+      data-radius={appearance.radius}
+      data-density={appearance.density}
+      style={themeStyle(appearance.variables)}
+    >
+      <div className={`incld-dialog-backdrop ${backdropClassName}`.trim()} role="presentation" onMouseDown={() => onOpenChange(false)}>
+        <div
+          ref={panel}
+          className={`incld-dialog ${className}`.trim()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={description ? descriptionId : undefined}
+          tabIndex={-1}
+          onMouseDown={event => event.stopPropagation()}
+        >
+          <header><div><h2 id={titleId}>{title}</h2>{description && <p id={descriptionId}>{description}</p>}</div><button type="button" aria-label={resolvedCloseLabel} className="incld-icon-button" onClick={() => onOpenChange(false)}>×</button></header>
+          {children}
+        </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
