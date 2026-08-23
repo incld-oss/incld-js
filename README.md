@@ -9,7 +9,7 @@ schedules, approvals, audit trails, and bulk operations for application teams.
 | --- | --- |
 | `@incld/cli` | Safe Next.js App Router initializer (`npx @incld/cli init`) |
 | `@incld/client` | Trusted server client, credential-free browser client, signed webhooks, and Next.js, Express, SvelteKit, and Nuxt adapters |
-| `@incld/react` | Shared provider, appearance contract, and async primitives |
+| `@incld/react` | Shared provider, visible-tab automatic refresh, appearance contract, and async primitives |
 | `@incld/react-schedules` | Scheduling components and hooks |
 | `@incld/react-approvals` | Approval workflow components and hooks |
 | `@incld/react-audit` | Audit trail components and hooks |
@@ -40,6 +40,10 @@ npm install @incld/client @incld/react
 
 Add the feature packages your application uses. The complete App Router
 integration lives in [`examples/nextjs`](examples/nextjs).
+
+Mounted React query hooks refresh every five seconds by default, pause while
+the browser tab is hidden, and refresh immediately when it becomes visible.
+Set `refreshInterval={false}` on `IncldProvider` to opt into manual refreshes.
 
 ## Development
 

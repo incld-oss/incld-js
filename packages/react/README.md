@@ -16,6 +16,7 @@ export function Providers({children}: {children: React.ReactNode}) {
   return (
     <IncldProvider
       baseUrl="/api/incld"
+      refreshInterval={5_000}
       appearance={{
         colorScheme: 'system',
         accentColor: 'emerald',
@@ -43,9 +44,12 @@ The provider uses `IncldBrowser`, never a project secret. Mount a framework prox
 | `baseUrl` | `string` | `/api/incld`; ignored when `client` is supplied |
 | `appearance` | `IncldAppearance` | System scheme, indigo, medium radius, comfortable density |
 | `labels` | `Record<string, string>` | `{}`; shared localization overrides |
+| `refreshInterval` | `number \| false` | `5000`; mounted query hooks refresh while the document is visible. Positive values below 1000 are clamped; `false` disables automatic refresh. |
 | `onError` | `(error: IncldError) => void` | Called by feature mutation hooks |
 | `className` | `string` | Added to `.incld-root` |
 | `style` | `CSSProperties` | Merged after mapped theme variables |
+
+The default five-second refresh makes mounted lists, details, histories, progress, and gates converge on server state without application wiring. Refreshes pause while the document is hidden and run immediately when it becomes visible again. Only hooks mounted in the current application view make requests. Use `refreshInterval={false}` for manual-only behavior or call `useIncld().refresh()` after an application event.
 
 `appearance` accepts `colorScheme: 'light' | 'dark' | 'system'`, `accentColor: 'indigo' | 'blue' | 'emerald' | 'amber' | 'rose'`, `radius: 'small' | 'medium' | 'large'`, and `density: 'compact' | 'comfortable'`.
 
@@ -53,11 +57,11 @@ Theme variable keys are `accent`, `accentHover`, `accentContrast`, `accentInk`, 
 
 ## Hooks
 
-- `useIncld()` returns `client`, resolved `appearance`, `labels`, `version`, `refresh()`, and `reportError(error)`. It throws outside a provider.
+- `useIncld()` returns `client`, resolved `appearance`, `labels`, `version`, resolved `refreshInterval`, `refresh()`, and `reportError(error)`. It throws outside a provider.
 - `useIncldLabel(key, fallback)` returns a provider label or the fallback.
 - `useAsyncResource(loader, dependencies)` is an abort-aware loader returning `{data, error, status, refresh}`. Status is `idle | loading | success | error`.
 
-Mutations in feature packages call provider `refresh()`, causing mounted query hooks to refetch.
+The provider interval and successful feature mutations call provider `refresh()`, causing mounted query hooks to refetch. In-flight loaders are aborted when a newer refresh begins.
 
 ## Async component contract
 

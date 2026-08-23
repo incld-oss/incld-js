@@ -2,6 +2,8 @@
 
 React components and read hooks for a viewer-scoped chronological trail of Incld lifecycle events and application events. Audit is not available on Developer; it becomes available when any paid component is active.
 
+Mounted timelines and event details automatically refresh using the provider interval (five seconds by default), pause in hidden tabs, and refresh when the tab becomes visible again.
+
 ```bash
 npm install @incld/client @incld/react @incld/react-audit
 ```

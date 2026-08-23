@@ -2,12 +2,14 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type CSSProperties,
   type ReactNode,
 } from 'react';
 import {IncldBrowser, type IncldError} from '@incld/client';
+import {defaultRefreshInterval, resolveRefreshInterval, startRealtimeRefresh} from './realtime.js';
 
 export interface IncldThemeVariables {
   accent?: string;
@@ -56,6 +58,7 @@ export interface IncldContextValue {
   appearance: ResolvedIncldAppearance;
   labels: Readonly<Record<string, string>>;
   version: number;
+  refreshInterval: number | false;
   refresh: () => void;
   reportError: (error: IncldError) => void;
 }
@@ -67,6 +70,8 @@ export interface IncldProviderProps {
   baseUrl?: string;
   appearance?: IncldAppearance;
   labels?: Record<string, string>;
+  /** Automatic query refresh interval in milliseconds. Use false to disable. Values below 1000 are clamped. */
+  refreshInterval?: number | false;
   onError?: (error: IncldError) => void;
   className?: string;
   style?: CSSProperties;
@@ -116,6 +121,7 @@ export function IncldProvider({
   baseUrl = '/api/incld',
   appearance,
   labels = {},
+  refreshInterval = defaultRefreshInterval,
   onError,
   className = '',
   style,
@@ -124,6 +130,11 @@ export function IncldProvider({
   const browser = useMemo(() => client ?? new IncldBrowser({baseUrl}), [client, baseUrl]);
   const [version, setVersion] = useState(0);
   const refresh = useCallback(() => setVersion(value => value + 1), []);
+  const resolvedRefreshInterval = resolveRefreshInterval(refreshInterval);
+  useEffect(
+    () => startRealtimeRefresh(refresh, resolvedRefreshInterval),
+    [refresh, resolvedRefreshInterval],
+  );
   const resolvedAppearance = useMemo<ResolvedIncldAppearance>(() => ({
     colorScheme: appearance?.colorScheme ?? 'system',
     accentColor: appearance?.accentColor ?? 'indigo',
@@ -139,9 +150,10 @@ export function IncldProvider({
     appearance: resolvedAppearance,
     labels,
     version,
+    refreshInterval: resolvedRefreshInterval,
     refresh,
     reportError,
-  }), [browser, labels, refresh, reportError, resolvedAppearance, version]);
+  }), [browser, labels, refresh, reportError, resolvedAppearance, resolvedRefreshInterval, version]);
 
   return (
     <Context.Provider value={value}>
@@ -151,6 +163,7 @@ export function IncldProvider({
         data-accent={resolvedAppearance.accentColor}
         data-radius={resolvedAppearance.radius}
         data-density={resolvedAppearance.density}
+        data-refresh-interval={resolvedRefreshInterval === false ? 'off' : resolvedRefreshInterval}
         style={{...themeStyle(resolvedAppearance.variables), ...style}}
       >
         {children}

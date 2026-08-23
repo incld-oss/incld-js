@@ -2,6 +2,8 @@
 
 Customer-facing React components and hooks for durable schedules. Render them inside `IncldProvider` from `@incld/react` and mount the trusted browser proxy first.
 
+Mounted schedule, run-history, and details hooks automatically refresh using the provider interval (five seconds by default), pause in hidden tabs, and refresh when the tab becomes visible again.
+
 ```bash
 npm install @incld/client @incld/react @incld/react-schedules
 ```

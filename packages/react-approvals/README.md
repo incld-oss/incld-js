@@ -2,6 +2,8 @@
 
 React request, reviewer, policy, and presentation-gate components for durable human approvals. Render them inside `IncldProvider` and use a trusted framework proxy.
 
+Mounted inboxes, details, policies, and gates automatically refresh using the provider interval (five seconds by default), pause in hidden tabs, and refresh when the tab becomes visible again.
+
 ```bash
 npm install @incld/client @incld/react @incld/react-approvals
 ```
@@ -51,7 +53,7 @@ Do not pass `externalOrganizationId`, `requesterId`, reviewer identity, or actor
 </ApprovalGate>
 ```
 
-Required props are `resourceType`, `resourceId`, `action`, and `children`; optional props are `fallback`, `pending`, and `refreshOnFocus=true`.
+Required props are `resourceType`, `resourceId`, `action`, and `children`; optional props are `fallback`, `pending`, and `refreshOnFocus=true`. Provider polling keeps the gate current while it remains mounted; `refreshOnFocus` remains available for applications that disable provider polling.
 
 `ApprovalGate` is presentation only. Immediately before a sensitive mutation, call `approvals.check` on the trusted server and deny execution unless `approved` is true.
 

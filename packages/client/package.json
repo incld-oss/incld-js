@@ -1,6 +1,6 @@
 {
   "name": "@incld/client",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "@incld universal SDK substrate for component APIs, framework adapters, and webhooks",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

@@ -2,6 +2,8 @@
 
 React monitoring, progress, cancellation, and inspection components for server-created Bulk operations.
 
+Mounted operation lists, details, chunks, and events automatically refresh using the provider interval (five seconds by default), pause in hidden tabs, and refresh when the tab becomes visible again. Active operation progress retains its faster two-second poll and stops at a terminal state.
+
 ```bash
 npm install @incld/client @incld/react @incld/react-bulk
 ```
@@ -45,7 +47,7 @@ Current terminal states are `succeeded`, `completed_with_errors`, and `cancelled
 ## Hooks
 
 - `useBulkOperations(params?)` lists by action, status, limit, and cursor.
-- `useBulkOperation(id?, pollInterval=2000)` polls only while the document is visible and the operation is not terminal.
+- `useBulkOperation(id?, pollInterval=2000)` adds a faster active-operation poll while the document is visible and the operation is not terminal; shared provider refresh still keeps the surrounding list and inspection data current.
 - `useBulkChunks(id?)` and `useBulkEvents(id?)` load the first 100 inspection records.
 - `useBulkOperationMutation()` returns `{cancel(id, reason?), pending, error}`.
 

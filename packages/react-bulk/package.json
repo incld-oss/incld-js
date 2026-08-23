@@ -1,6 +1,6 @@
 {
   "name": "@incld/react-bulk",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "React components for monitoring incld bulk operations",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -8,7 +8,7 @@
   "exports": {".": {"types": "./dist/index.d.ts", "import": "./dist/index.mjs", "require": "./dist/index.js"}, "./styles.css": "./dist/styles.css", "./styles/default.css": "./dist/styles.css"},
   "scripts": {"build": "tsup", "typecheck": "tsc --noEmit"},
   "peerDependencies": {"react": ">=18.0.0", "react-dom": ">=18.0.0"},
-  "dependencies": {"@incld/client": "0.1.1", "@incld/react": "0.1.1"},
+  "dependencies": {"@incld/client": "0.2.0", "@incld/react": "0.2.0"},
   "devDependencies": {"react": "^18.0.0", "react-dom": "^18.0.0", "@types/react": "^18.0.0", "@types/react-dom": "^18.0.0", "tsup": "^8.0.0", "typescript": "^5.5.0"},
   "files": ["dist"],
   "license": "MIT",

@@ -16,7 +16,7 @@ Source: `packages/react/src/primitives.tsx:6`
 
 ### IncldAppearance
 
-Source: `packages/react/src/provider.tsx:42`
+Source: `packages/react/src/provider.tsx:44`
 
 | Prop | Type | Required |
 | --- | --- | --- |
@@ -84,7 +84,7 @@ Source: `packages/react/src/primitives.tsx:40`
 
 ### IncldProviderProps
 
-Source: `packages/react/src/provider.tsx:65`
+Source: `packages/react/src/provider.tsx:68`
 
 | Prop | Type | Required |
 | --- | --- | --- |
@@ -92,6 +92,7 @@ Source: `packages/react/src/provider.tsx:65`
 | `baseUrl` | `string` | No |
 | `appearance` | `IncldAppearance` | No |
 | `labels` | `Record<string, string>` | No |
+| `refreshInterval` | `number \| false` | No |
 | `onError` | `(error: IncldError) => void` | No |
 | `className` | `string` | No |
 | `style` | `CSSProperties` | No |
@@ -108,7 +109,7 @@ Source: `packages/react/src/primitives.tsx:12`
 
 ### IncldThemeVariables
 
-Source: `packages/react/src/provider.tsx:12`
+Source: `packages/react/src/provider.tsx:14`
 
 | Prop | Type | Required |
 | --- | --- | --- |

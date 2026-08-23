@@ -1,5 +1,13 @@
 # @incld/react-approvals
 
+## 0.2.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @incld/react@0.2.0
+  - @incld/client@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes

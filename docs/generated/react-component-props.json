@@ -56,7 +56,7 @@
               "optional": true
             }
           ],
-          "source": "packages/react/src/provider.tsx:42"
+          "source": "packages/react/src/provider.tsx:44"
         },
         {
           "name": "IncldButtonProps",
@@ -215,6 +215,11 @@
               "optional": true
             },
             {
+              "name": "refreshInterval",
+              "type": "number | false",
+              "optional": true
+            },
+            {
               "name": "onError",
               "type": "(error: IncldError) => void",
               "optional": true
@@ -235,7 +240,7 @@
               "optional": false
             }
           ],
-          "source": "packages/react/src/provider.tsx:65"
+          "source": "packages/react/src/provider.tsx:68"
         },
         {
           "name": "IncldSpinnerProps",
@@ -394,7 +399,7 @@
               "optional": true
             }
           ],
-          "source": "packages/react/src/provider.tsx:12"
+          "source": "packages/react/src/provider.tsx:14"
         }
       ]
     },

@@ -50,4 +50,20 @@ describe('shared React appearance contract', () => {
     expect(html).toContain('already has a policy in this project');
     expect(html).toContain('role="alert"');
   });
+
+  test('advertises the automatic refresh interval and supports disabling it', () => {
+    const defaultHtml = renderToStaticMarkup(
+      <IncldProvider client={client}><span>Default sync</span></IncldProvider>,
+    );
+    const clampedHtml = renderToStaticMarkup(
+      <IncldProvider client={client} refreshInterval={100}><span>Fast sync</span></IncldProvider>,
+    );
+    const disabledHtml = renderToStaticMarkup(
+      <IncldProvider client={client} refreshInterval={false}><span>Manual sync</span></IncldProvider>,
+    );
+
+    expect(defaultHtml).toContain('data-refresh-interval="5000"');
+    expect(clampedHtml).toContain('data-refresh-interval="1000"');
+    expect(disabledHtml).toContain('data-refresh-interval="off"');
+  });
 });
