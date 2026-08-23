@@ -7,7 +7,8 @@ import {ApprovalPolicyEditor, ApprovalTimeline} from '../src/index.js';
 
 test('approval timeline communicates state with text, not color alone', () => {
   const html = renderToStaticMarkup(<ApprovalTimeline approval={{id:'apr_1',projectId:'prj_1',resourceType:'invoice',resourceId:'inv_1',action:'pay',status:'approved',metadata:{},revision:1,policySnapshot:{},decisions:[{id:'dec_1',decision:'approved',actorId:'reviewer_1',createdAt:'2026-01-01T00:00:00Z'}],events:[],createdAt:'2026-01-01T00:00:00Z',updatedAt:'2026-01-01T00:00:00Z'}} />);
-  expect(html).toContain('approval approved');
+  expect(html).toContain('approved');
+  expect(html).not.toContain('approval approved');
   expect(html).toContain('reviewer_1');
   expect(html).toContain('<ol');
 });

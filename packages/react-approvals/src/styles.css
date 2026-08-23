@@ -5,24 +5,10 @@
 }
 
 .incld-resource-summary {
-  display: grid;
-  gap: 3px;
   padding: 14px;
   border: 1px solid var(--incld-border);
   border-radius: var(--incld-radius);
   background: var(--incld-surface);
-}
-
-.incld-resource-summary > span {
-  color: var(--incld-accent-ink);
-  font-size: 11px;
-  font-weight: 750;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.incld-resource-summary small {
-  color: var(--incld-muted);
 }
 
 .incld-approval-list {
@@ -40,7 +26,7 @@
   width: 100%;
   min-height: 74px;
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
   padding: 12px 15px;
@@ -56,7 +42,7 @@
   background: var(--incld-surface-hover);
 }
 
-.incld-approval-row > button > span:nth-child(2),
+.incld-approval-row > button > span:first-child,
 .incld-approval-row-meta {
   min-width: 0;
   display: grid;
@@ -76,30 +62,6 @@
 
 .incld-approval-row-meta {
   justify-items: end;
-}
-
-.incld-approval-icon {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border: 1px solid color-mix(in srgb, var(--incld-accent) 25%, var(--incld-border));
-  border-radius: 50%;
-  background: var(--incld-accent-soft);
-  color: var(--incld-accent-ink);
-  font-weight: 800;
-}
-
-.incld-approval-approved {
-  border-color: var(--incld-success-border);
-  background: var(--incld-success-soft);
-  color: var(--incld-success);
-}
-
-.incld-approval-rejected {
-  border-color: var(--incld-danger-border);
-  background: var(--incld-danger-soft);
-  color: var(--incld-danger);
 }
 
 .incld-approval-actions {
@@ -123,8 +85,15 @@
   color: var(--incld-text);
 }
 
+.incld-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
 .incld-approval-details h3 {
-  margin: 8px 0 3px;
+  margin: 0;
   font-size: 18px;
   line-height: 1.3;
 }
@@ -298,12 +267,7 @@
 }
 
 @media (max-width: 620px) {
-  .incld-approval-row > button {
-    grid-template-columns: 38px minmax(0, 1fr);
-  }
-
   .incld-approval-row-meta {
-    grid-column: 2;
     justify-items: start;
   }
 
