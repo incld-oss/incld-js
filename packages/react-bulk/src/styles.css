@@ -17,7 +17,7 @@
 
 .incld-bulk-progress h3 {
   overflow-wrap: anywhere;
-  margin: 7px 0 0;
+  margin: 0;
   font-size: 18px;
   line-height: 1.3;
 }
@@ -44,31 +44,16 @@
   transition: width 180ms ease;
 }
 
-.incld-bulk-progress dl {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+.incld-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.incld-bulk-summary {
   margin: 0;
-}
-
-.incld-bulk-progress dl div {
-  min-width: 0;
-  padding: 10px;
-  border: 1px solid color-mix(in srgb, var(--incld-border) 65%, transparent);
-  border-radius: max(7px, calc(var(--incld-radius) - 3px));
-  background: var(--incld-surface);
-}
-
-.incld-bulk-progress dt {
   color: var(--incld-muted);
-  font-size: 12px;
-}
-
-.incld-bulk-progress dd {
-  overflow-wrap: anywhere;
-  margin: 2px 0 0;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
 }
 
 .incld-bulk-list {
@@ -156,8 +141,7 @@
 }
 
 .incld-bulk-inspection small,
-.incld-bulk-inspection p,
-.incld-bulk-events span {
+.incld-bulk-inspection p {
   color: var(--incld-muted);
 }
 
@@ -168,43 +152,7 @@
   font-size: 13px;
 }
 
-.incld-bulk-events {
-  list-style: none;
-  margin: 0;
-  padding: 0 0 0 14px;
-  border-left: 1px solid var(--incld-border);
-}
-
-.incld-bulk-events li {
-  position: relative;
-  display: grid;
-  gap: 2px;
-  padding: 0 0 15px 14px;
-  text-transform: capitalize;
-}
-
-.incld-bulk-events li::before {
-  content: "";
-  position: absolute;
-  left: -5px;
-  top: 5px;
-  width: 9px;
-  height: 9px;
-  border: 2px solid var(--incld-bg);
-  border-radius: 50%;
-  background: var(--incld-accent);
-  box-shadow: 0 0 0 1px var(--incld-border);
-}
-
-.incld-bulk-events span {
-  font-size: 12px;
-}
-
 @media (max-width: 560px) {
-  .incld-bulk-progress dl {
-    grid-template-columns: 1fr;
-  }
-
   .incld-bulk-progress > .incld-button {
     width: 100%;
   }

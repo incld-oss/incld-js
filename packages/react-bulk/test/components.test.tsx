@@ -33,7 +33,10 @@ test('bulk progress supports supplied data, custom classes, and safe progress bo
   );
 
   expect(html).toContain('incld-bulk-progress embedded-progress');
-  expect(html).toContain('aria-label="sync_contacts progress"');
+  expect(html).toContain('sync contacts');
+  expect(html).toContain('aria-label="sync contacts progress"');
   expect(html).toContain('aria-valuenow="100"');
   expect(html).toContain('width:100%');
+  expect(html).toContain('30 items · 3 of 3 batches complete');
+  expect(html).not.toContain('Succeeded');
 });
