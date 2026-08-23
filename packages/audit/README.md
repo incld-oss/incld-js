@@ -15,6 +15,8 @@ import '@incld/react-audit/styles.css';
 {event && <AuditEventDetails event={event} />}
 ```
 
+Timeline rows preserve the full event namespace (for example, `approval.requested` is shown as “approval requested”) and include the actor, subject, and component as context. The details view also exposes the source, visibility, and structured event payload.
+
 Viewer and event actor identity are bound by the trusted proxy and are never component props.
 
 ## Components
@@ -22,8 +24,8 @@ Viewer and event actor identity are bound by the trusted proxy and are never com
 | Component | Props and behavior |
 | --- | --- |
 | `AuditFilters` | `value?`, `defaultValue?`, `onChange?(filters)`, `className?`. Controlled when `value` exists; otherwise initialized from `defaultValue`. The rendered UI edits `component`, `typePrefix`, and `since`, plus Clear. |
-| `AuditTimeline` | `filters?`, `pageSize=25`, `onSelect?(event)`, `renderItem?(event)`, `className?`, and `loading`/`empty`/`error` renderers. |
-| `AuditEventDetails` | Supply `event?` or `eventId?`; `className?`, `loading?`, `error?`. Passing the event avoids a request. |
+| `AuditTimeline` | `filters?`, `pageSize=25`, `onSelect?(event)`, `renderItem?(event)`, `className?`, and `loading`/`empty`/`error` renderers. Default rows show the full event type plus actor, subject, component, and time. |
+| `AuditEventDetails` | Supply `event?` or `eventId?`; `className?`, `loading?`, `error?`. Passing the event avoids a request. Shows the event namespace, actor, subject, source, visibility, and expandable payload. |
 
 `ListAuditEventsParams` accepts `component`, `components`, exact `type`, `typePrefix`, `actorId`, `subjectType`, `subjectId`, `viewerId`, `since`, `until`, `limit`, and `cursor`. The `AuditFilters` component only renders the subset described above; build custom controls for the remaining fields.
 

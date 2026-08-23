@@ -1014,7 +1014,7 @@
               "optional": true
             }
           ],
-          "source": "packages/audit/src/components.tsx:21"
+          "source": "packages/audit/src/components.tsx:25"
         },
         {
           "name": "AuditFiltersProps",
@@ -1041,7 +1041,7 @@
               "optional": true
             }
           ],
-          "source": "packages/audit/src/components.tsx:30"
+          "source": "packages/audit/src/components.tsx:34"
         },
         {
           "name": "AuditTimelineProps",
@@ -1075,7 +1075,7 @@
               "optional": true
             }
           ],
-          "source": "packages/audit/src/components.tsx:9"
+          "source": "packages/audit/src/components.tsx:13"
         }
       ]
     }

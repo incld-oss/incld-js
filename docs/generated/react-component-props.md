@@ -391,7 +391,7 @@ Source: `packages/react-bulk/src/components.tsx:8`
 
 Extends: `AsyncViewProps`
 
-Source: `packages/audit/src/components.tsx:21`
+Source: `packages/audit/src/components.tsx:25`
 
 | Prop | Type | Required |
 | --- | --- | --- |
@@ -401,7 +401,7 @@ Source: `packages/audit/src/components.tsx:21`
 
 ### AuditFiltersProps
 
-Source: `packages/audit/src/components.tsx:30`
+Source: `packages/audit/src/components.tsx:34`
 
 | Prop | Type | Required |
 | --- | --- | --- |
@@ -414,7 +414,7 @@ Source: `packages/audit/src/components.tsx:30`
 
 Extends: `AsyncViewProps`
 
-Source: `packages/audit/src/components.tsx:9`
+Source: `packages/audit/src/components.tsx:13`
 
 | Prop | Type | Required |
 | --- | --- | --- |

@@ -1,5 +1,11 @@
 # @incld/react-audit
 
+## 0.1.2
+
+### Patch Changes
+
+- Preserve the full audit event namespace and restore actor, subject, source, visibility, component, and structured payload context in the default audit views.
+
 ## 0.1.1
 
 ### Patch Changes
