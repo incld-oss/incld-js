@@ -102,4 +102,24 @@ describe('Incld clients', () => {
     const client = new Incld({apiKey: 'sk_test', fetch: mock(() => Promise.resolve(Response.json({error: {code: 'component_not_enabled', message: 'Not enabled'}}, {status: 403})))});
     expect(client.actions.list()).rejects.toThrow(ForbiddenError);
   });
+
+  test('tombstones audit PII through a trusted server request', async () => {
+    const fetcher = mock((_url, init) => Promise.resolve(Response.json({data: {
+      id: 'evt_1', component: 'custom', type: 'customer.exported', source: 'manual',
+      visibility: 'project', data: {}, tombstoned_at: '2026-08-24T00:00:00Z',
+      tombstone_reason: 'data_subject_erasure', tombstone_event_id: 'evt_2',
+      occurred_at: '2026-08-20T00:00:00Z', inserted_at: '2026-08-20T00:00:00Z',
+    }})));
+    const client = new Incld({apiKey: 'sk_test', fetch: fetcher});
+
+    const event = await client.auditEvents.tombstone('evt/one', {
+      reason: 'data_subject_erasure', actorId: 'privacy_admin',
+    });
+
+    expect(fetcher.mock.calls[0][0]).toBe('https://api.incld.dev/v1/audit-events/evt%2Fone/tombstone');
+    expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body))).toEqual({
+      reason: 'data_subject_erasure', actor_id: 'privacy_admin',
+    });
+    expect(event).toMatchObject({tombstoneReason: 'data_subject_erasure', tombstoneEventId: 'evt_2'});
+  });
 });

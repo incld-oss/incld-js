@@ -53,7 +53,7 @@ const page = await incld.schedules.list({status: 'active'});
 
 `IncldBrowser` rejects absolute URLs, accepts no API key, and ignores `RequestOptions.headers`. The client appends `/v1` when the base URL does not already end in `/v1`, so `/api/incld` maps to an application route under `/api/incld/v1/*`.
 
-The browser proxy does not expose `actions.define` or `bulkOperations.create`. Perform them with `Incld` on a trusted server. Every Approval Policy operation and Bulk read is denied unless the adapter's `authorize` callback explicitly permits it.
+The browser proxy does not expose `actions.define`, `auditEvents.tombstone`, or `bulkOperations.create`. Perform them with `Incld` on a trusted server. Every Approval Policy operation and Bulk read is denied unless the adapter's `authorize` callback explicitly permits it.
 
 ## Resources
 
@@ -64,7 +64,7 @@ The browser proxy does not expose `actions.define` or `bulkOperations.create`. P
 | `runs` | `list`, `get` |
 | `approvals` | `list`, `get`, `check`, `create`, `update`, `decide`, `approve`, `reject`, `cancel`, `revoke`, `events`, `remove` |
 | `approvalPolicies` | `list`, `get`, `create`, `update`, `remove`; explicit proxy authorization required |
-| `auditEvents` | `list`, `get`, `create` |
+| `auditEvents` | `list`, `get`, `create`, `tombstone` (server only) |
 | `bulkOperations` | `list`, `get`, `create` (server only), `chunks`, `events`, `cancel` |
 | `sessions` | `create` |
 

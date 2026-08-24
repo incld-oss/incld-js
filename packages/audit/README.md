@@ -56,4 +56,4 @@ await tenantIncld.auditEvents.create({
 }, {idempotencyKey: `report-exported:${exportId}`});
 ```
 
-Manual events are append-only. Record a correction as a new event rather than modifying history.
+Normal event history is append-only. Record a correction as a new event rather than modifying history. For PII erasure, call the trusted-server-only `auditEvents.tombstone(id, {reason, actorId?})`; it scrubs identity, viewer, idempotency, and payload fields, preserves the event envelope, and appends an accountable tombstone record. The detail component labels tombstoned events and does not expose erased data.

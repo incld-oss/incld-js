@@ -4,15 +4,18 @@ import {pageFromWire, type PageWire} from './shared.js';
 
 export type AuditVisibility = 'project' | 'participants' | 'restricted';
 export type AuditSource = 'system' | 'manual';
+export type AuditTombstoneReason = 'data_subject_erasure' | 'sensitive_data' | 'customer_request';
 export interface AuditEvent {
   id: string; component: string; type: string; actorId?: string; externalOrganizationId?: string; subjectType?: string;
   subjectId?: string; source: AuditSource; visibility: AuditVisibility;
-  data: Record<string, unknown>; occurredAt: string; createdAt: string;
+  data: Record<string, unknown>; tombstonedAt?: string; tombstoneReason?: AuditTombstoneReason;
+  tombstoneEventId?: string; occurredAt: string; createdAt: string;
 }
 export interface AuditEventWire {
   id: string; component: string; type: string; actor_id?: string; external_organization_id?: string; subject_type?: string;
   subject_id?: string; source: AuditSource; visibility: AuditVisibility;
-  data?: Record<string, unknown>; occurred_at: string; inserted_at: string;
+  data?: Record<string, unknown>; tombstoned_at?: string; tombstone_reason?: AuditTombstoneReason;
+  tombstone_event_id?: string; occurred_at: string; inserted_at: string;
 }
 export interface ListAuditEventsParams extends PageParams {
   externalOrganizationId?: string;
@@ -24,6 +27,10 @@ export interface CreateAuditEventInput {
   type: string; actorId?: string; subjectType?: string; subjectId?: string;
   visibility?: AuditVisibility; participantIds?: string[]; allowedViewerIds?: string[];
   data?: Record<string, unknown>; occurredAt?: string;
+}
+export interface TombstoneAuditEventInput {
+  reason: AuditTombstoneReason;
+  actorId?: string;
 }
 
 export const auditEventFromWire = (event: AuditEventWire): AuditEvent => ({
@@ -37,6 +44,9 @@ export const auditEventFromWire = (event: AuditEventWire): AuditEvent => ({
   source: event.source,
   visibility: event.visibility,
   data: event.data ?? {},
+  tombstonedAt: event.tombstoned_at,
+  tombstoneReason: event.tombstone_reason,
+  tombstoneEventId: event.tombstone_event_id,
   occurredAt: event.occurred_at,
   createdAt: event.inserted_at,
 });
@@ -83,6 +93,18 @@ export class AuditResource {
       data: input.data,
       occurred_at: input.occurredAt,
     }, undefined, options);
+    return auditEventFromWire(response.data);
+  }
+
+  /** Trusted-server PII erasure. Not available through browser proxy handlers. */
+  async tombstone(id: string, input: TombstoneAuditEventInput, options?: RequestOptions): Promise<AuditEvent> {
+    const response = await this.client._request<{data: AuditEventWire}>(
+      'POST',
+      `/audit-events/${encodeURIComponent(id)}/tombstone`,
+      {reason: input.reason, actor_id: input.actorId},
+      undefined,
+      options,
+    );
     return auditEventFromWire(response.data);
   }
 }

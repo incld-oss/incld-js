@@ -1,5 +1,11 @@
 # @incld/client
 
+## 0.2.1
+
+### Patch Changes
+
+- Add trusted-server audit PII tombstones and render erased events explicitly.
+
 ## 0.2.0
 
 ## 0.1.1

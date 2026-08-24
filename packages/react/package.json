@@ -1,6 +1,6 @@
 {
   "name": "@incld/react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shared React provider, appearance, and async primitives for incld components",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -22,7 +22,7 @@
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
-  "dependencies": {"@incld/client": "0.2.0"},
+  "dependencies": {"@incld/client": "0.2.1"},
   "devDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

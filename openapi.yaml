@@ -360,6 +360,10 @@ components:
         source: { type: string, enum: [system, manual] }
         visibility: { type: string, enum: [project, participants, restricted] }
         data: { type: object, additionalProperties: true }
+        tombstoned_at: { type: string, format: date-time, nullable: true }
+        tombstone_reason:
+          { type: string, enum: [data_subject_erasure, sensitive_data, customer_request], nullable: true }
+        tombstone_event_id: { type: string, format: uuid, nullable: true }
         occurred_at: { type: string, format: date-time }
         inserted_at: { type: string, format: date-time }
     AuditEventInput:
@@ -376,6 +380,14 @@ components:
         allowed_viewer_ids: { type: array, items: { type: string } }
         data: { type: object, additionalProperties: true }
         occurred_at: { type: string, format: date-time }
+    AuditTombstoneInput:
+      type: object
+      required: [reason]
+      properties:
+        reason:
+          { type: string, enum: [data_subject_erasure, sensitive_data, customer_request] }
+        actor_id:
+          { type: string, description: Optional trusted operator identifier for the tombstone record. }
     BulkOperation:
       type: object
       required:
@@ -807,14 +819,33 @@ paths:
   /audit-events/{id}:
     parameters:
       [
+        { name: id, in: path, required: true, schema: { type: string, format: uuid } },
         { $ref: "#/components/parameters/OrganizationScope" },
         { $ref: "#/components/parameters/UserScope" },
       ]
     get:
       summary: Get an audit event
-      parameters:
-        [{ name: id, in: path, required: true, schema: { type: string } }]
       responses: { "200": { description: Audit event returned } }
+  /audit-events/{id}/tombstone:
+    parameters:
+      [
+        { name: id, in: path, required: true, schema: { type: string, format: uuid } },
+        { $ref: "#/components/parameters/OrganizationScope" },
+      ]
+    post:
+      summary: Tombstone PII in an audit event
+      description: Trusted server operation. Scrubs identity and payload fields while preserving the event envelope and appending an erasure record.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AuditTombstoneInput" }
+      responses:
+        {
+          "200": { description: Tombstoned audit event returned },
+          "403": { $ref: "#/components/responses/Error" },
+          "422": { $ref: "#/components/responses/Error" },
+        }
   /bulk-operations:
     parameters:
       [

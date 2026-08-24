@@ -1,6 +1,6 @@
 {
   "name": "@incld/react-approvals",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "@incld React components for durable human approval workflows",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -24,8 +24,8 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@incld/client": "0.2.0",
-    "@incld/react": "0.2.0"
+    "@incld/client": "0.2.1",
+    "@incld/react": "0.2.1"
   },
   "devDependencies": {
     "react": "^18.0.0",

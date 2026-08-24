@@ -1,5 +1,14 @@
 # @incld/react-audit
 
+## 0.2.1
+
+### Patch Changes
+
+- Add trusted-server audit PII tombstones and render erased events explicitly.
+- Updated dependencies
+  - @incld/client@0.2.1
+  - @incld/react@0.2.1
+
 ## 0.2.0
 
 ### Patch Changes

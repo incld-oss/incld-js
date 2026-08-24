@@ -82,7 +82,7 @@
   <header class="incld-audit-header">
     <div>
       <h4>{title}</h4>
-      <p>Immutable request events and reviewer decisions, oldest first.</p>
+      <p>Append-only request events and reviewer decisions, oldest first.</p>
     </div>
     {#if exportable}<button type="button" class="incld-control" on:click={downloadAudit}>Export JSON</button>{/if}
   </header>

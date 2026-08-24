@@ -46,6 +46,7 @@ const expected = new Map<string, string>([
 
 const serverOnly = new Set([
   'POST /actions',
+  'POST /audit-events/{id}/tombstone',
   'POST /bulk-operations',
 ]);
 
@@ -73,7 +74,7 @@ function concretePath(path: string) {
 describe('browser proxy and OpenAPI contract', () => {
   test('covers every public operation except documented server-only writes', () => {
     const documented = openApiOperations();
-    expect(documented).toHaveLength(40);
+    expect(documented).toHaveLength(41);
     expect(new Set([...expected.keys(), ...serverOnly])).toEqual(new Set(documented));
 
     for (const operation of documented) {

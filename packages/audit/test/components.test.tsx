@@ -16,3 +16,12 @@ test('audit details preserve the event namespace and contextual identity', () =>
   expect(html).toContain('project');
   expect(html).toContain('&quot;decision&quot;: &quot;approved&quot;');
 });
+
+test('audit details label tombstoned events without rendering erased payloads', () => {
+  const client = new IncldBrowser({fetch: async () => Response.json({data: {}})});
+  const html = renderToStaticMarkup(<IncldProvider client={client}><AuditEventDetails event={{id:'evt_1',component:'custom',type:'customer.exported',source:'manual',visibility:'project',data:{},tombstonedAt:'2026-08-24T00:00:00Z',tombstoneReason:'data_subject_erasure',tombstoneEventId:'evt_2',occurredAt:'2026-01-01T00:00:00Z',createdAt:'2026-01-01T00:00:00Z'}} /></IncldProvider>);
+  expect(html).toContain('PII erased');
+  expect(html).toContain('data subject erasure');
+  expect(html).toContain('<dd>Erased</dd>');
+  expect(html).not.toContain('Event data');
+});
