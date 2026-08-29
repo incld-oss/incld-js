@@ -9,7 +9,7 @@
   "scripts": {"build": "tsup", "typecheck": "tsc --noEmit"},
   "peerDependencies": {"react": ">=18.0.0", "react-dom": ">=18.0.0"},
   "dependencies": {"@incld/client": "0.2.1", "@incld/react": "0.2.1"},
-  "devDependencies": {"react": "^18.0.0", "react-dom": "^18.0.0", "@types/react": "^18.0.0", "@types/react-dom": "^18.0.0", "tsup": "^8.0.0", "typescript": "^5.5.0"},
+  "devDependencies": {"react": "^18.0.0", "react-dom": "^18.0.0", "@types/react": "^19.2.18", "@types/react-dom": "^18.0.0", "tsup": "^8.0.0", "typescript": "^5.5.0"},
   "files": ["dist"],
   "license": "MIT",
   "repository": {"type": "git", "url": "git+https://github.com/incld-oss/incld-js.git", "directory": "packages/react-bulk"},
