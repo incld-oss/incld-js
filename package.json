@@ -19,7 +19,7 @@
     "@playwright/experimental-ct-svelte": "1.58.2",
     "@playwright/test": "1.58.2",
     "svelte": "^5.56.10",
-    "typescript": "^5.5.0"
+    "typescript": "^7.0.2"
   },
   "scripts": {
     "changeset": "changeset",
