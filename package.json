@@ -17,7 +17,7 @@
     "@changesets/cli": "3.0.1",
     "@playwright/experimental-ct-react": "1.58.2",
     "@playwright/experimental-ct-svelte": "1.58.2",
-    "@playwright/test": "1.58.2",
+    "@playwright/test": "1.63.0",
     "svelte": "^5.56.10",
     "typescript": "^5.5.0"
   },
